@@ -1,0 +1,240 @@
+* {
+  margin: 0;
+}
+
+:root {
+  --medium-yellow: #ffcd60;
+  --light-yellow: #fee893;
+  --medium-dark: #181f29;
+  --dark: #06050a;
+  --brown: #594837;
+  --white: #ffffff;
+}
+
+.color-medium-yellow {
+  color: var(--medium-yellow);
+}
+
+.color-medium-light-yellow {
+  color: var(--light-yellow);
+}
+
+.color-medium-medium-dark {
+  color: var(--medium-dark);
+}
+
+.color-medium-dark {
+  color: var(--dark);
+}
+
+.color-dark {
+  color: var(--dark);
+}
+
+.color-brown {
+  color: var(--brown);
+}
+
+.color-white {
+  color: var(--white);
+}
+
+.bg-color-medium-yellow {
+  background-color: var(--medium-yellow);
+}
+
+.bg-color-medium-light-yellow {
+  background-color: var(--light-yellow);
+}
+
+.bg-color-medium-medium-dark {
+  background-color: var(--medium-dark);
+}
+
+.bg-color-medium-dark {
+  background-color: var(--dark);
+}
+
+.bg-color-dark {
+  background-color: var(--dark);
+}
+
+.bg-color-brown {
+  background-color: var(--brown);
+}
+
+.bg-color-white {
+  background-color: var(--white);
+}
+
+.fira-sans-thin {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.fira-sans-thin-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.fira-sans-extralight {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.fira-sans-extralight-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.fira-sans-light {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.fira-sans-light-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.fira-sans-regular {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.fira-sans-regular-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.fira-sans-medium {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.fira-sans-medium-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.fira-sans-semibold {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.fira-sans-semibold-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.fira-sans-bold {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.fira-sans-bold-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.fira-sans-extrabold {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.fira-sans-extrabold-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.fira-sans-black {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.fira-sans-black-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+
+.dancing-script-400 {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dancing-script-500 {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.dancing-script-600 {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.dancing-script-700 {
+  font-family: "Dancing Script", cursive;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.size-09 {
+  font-size: 9pt !important;
+}
+
+.size-10 {
+  font-size: 10pt !important;
+}
+
+.size-11 {
+  font-size: 11pt !important;
+}
+
+.size-12 {
+  font-size: 12pt !important;
+}
+
+.size-13 {
+  font-size: 13pt !important;
+}
+
+.size-14 {
+  font-size: 14pt !important;
+}
+
+.size-15 {
+  font-size: 15pt !important;
+}
+
+.size-16 {
+  font-size: 16pt !important;
+}
+
+.modal-dialog-centered {
+  justify-content: center;
+}
