@@ -1,6 +1,14 @@
 <?php
   session_start();
   include('../utils/connections.php');
+  if (isset($_SESSION['checkout.order_number'])) {
+    $order_number = $_SESSION['checkout.order_number'];
+    $fetch_query = "SELECT * FROM `queue` WHERE queue_payment_no = '.$order_number.'";
+    $result = $conn->query($fetch_query);
+    if ($result->num_rows > 0) {
+      header('../queue/');
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
