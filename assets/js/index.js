@@ -2,7 +2,7 @@ let selectedSize = 'Medio';
 let selectedItem = '';
 let selectedPriceObj = {};
 let selectedPrice = 0;
-let isDineIn = false;
+let isDineIn = true;
 
 let selectedItems = [];
 
