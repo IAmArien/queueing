@@ -1,13 +1,10 @@
 <?php
   session_start();
   include('../utils/connections.php');
-  if (isset($_SESSION['checkout.order_number'])) {
-    $order_number = $_SESSION['checkout.order_number'];
-    $fetch_query = "SELECT * FROM `queue` WHERE queue_payment_no = '.$order_number.'";
-    $result = $conn->query($fetch_query);
-    if ($result->num_rows > 0) {
-      header('../queue/');
-    }
+  if (isset($_SESSION['checkout.for_queueing'])) {
+    header('Location: ../queue/');
+  } else if (!isset($_SESSION['checkout.order_number'])) {
+    header('Location: ../');
   }
 ?>
 <!DOCTYPE html>
@@ -105,5 +102,24 @@
         window.location.href = "./";
       }, 10000);
     });
+  </script>
+  <script type="text/javascript">
+    <?php
+      if (isset($_SESSION['checkout.order_number'])) {
+        $order_number = $_SESSION['checkout.order_number'];
+        $fetch_query = "SELECT * FROM `queue` WHERE queue_payment_no = '".$order_number."'";
+        $result = $conn->query($fetch_query);
+        if ($result->num_rows > 0) {
+          $_SESSION['checkout.for_queueing'] = 'FR';
+          echo '
+            $(document).ready(() => {
+              setTimeout(() => {
+                window.location.href = "../queue/";
+              }, 1000);
+            });
+          ';
+        }
+      }
+    ?>
   </script>
 </html>

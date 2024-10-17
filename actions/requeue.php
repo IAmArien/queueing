@@ -13,6 +13,7 @@
       $result = $stmt->execute();
     }
   }
+  unset($_SESSION['checkout.for_queueing']);
   unset($_SESSION['checkout.order_id']);
   unset($_SESSION['checkout.order_number']);
   unset($_SESSION['checkout.order_products']);

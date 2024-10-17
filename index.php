@@ -1,7 +1,9 @@
 <?php
   session_start();
   include('./utils/connections.php');
-  if (isset($_SESSION['checkout.order_number'])) {
+  if (isset($_SESSION['checkout.for_queueing'])) {
+    header('Location: ./queue/');
+  } else if (isset($_SESSION['checkout.order_number'])) {
     header('Location: ./for_payment/');
   }
 ?>

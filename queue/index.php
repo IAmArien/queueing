@@ -1,6 +1,15 @@
 <?php
   session_start();
   include('../utils/connections.php');
+  if (!isset($_SESSION['checkout.for_queueing'])) {
+    if (isset($_SESSION['checkout.order_number'])) {
+      header('Location: ../for_payment/');
+    } else {
+      header('Location: ../');
+    }
+  } else if (!isset($_SESSION['checkout.order_number'])) {
+    header('Location: ../');
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,17 +33,6 @@
       <div class="div-queue-wrapper">
         <form action="../actions/requeue.php" method="POST">
           <div class="div-queue-container">
-            <?php
-              $queue_number = 0;
-              $queue_serving = '';
-              $fetch_query = "SELECT * FROM `queue` WHERE queue_serving = 'serving' OR queue_serving = 'served' ORDER BY id DESC LIMIT 1";
-              $result = $conn->query($fetch_query);
-              if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $queue_number = $row['queue_number'];
-                $queue_serving = $row['queue_serving'];
-              }
-            ?>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -61,24 +59,43 @@
             </p>
             <h1 class="fira-sans-bold color-brown" style="text-align: center;">
               <?php
-                if (isset($_SESSION['queue.number'])) {
-                  if ($queue_number == $_SESSION['queue.number']) {
-                    echo "IT'S YOUR TURN !!";
-                  } else {
-                    echo 'Claim No. #'.$_SESSION['queue.number'];
+                if (isset($_SESSION['checkout.order_number'])) {
+                  $order_number = $_SESSION['checkout.order_number'];
+                  $fetch_query = "SELECT * FROM `queue` WHERE queue_payment_no = '".$order_number."' ORDER BY id DESC LIMIT 1";
+                  $result = $conn->query($fetch_query);
+                  if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $serving_status = $row['queue_serving'];
+                    $queue_number = $row['queue_number'];
+                    if ($serving_status == 'PREPARING') {
+                      echo 'Claim No. #'.$queue_number;
+                    } else {
+                      echo "IT'S YOUR TURN !!<br/>Claim No. #".$queue_number;
+                    }
                   }
                 }
               ?>
             </h1>
             <?php
-              if ($queue_number != 0) {
-                if ($queue_number != $_SESSION['queue.number']) {
-                  echo '
-                    <h6 class="fira-sans-regular color-light-white">
-                      Serving at the counter: <b>'.$queue_number.'</b>
-                    </h6>
-                  ';
+              $fetch_query = "SELECT * FROM `queue` WHERE queue_serving = 'SERVING' ORDER BY queue_number DESC LIMIT 5";
+              $result = $conn->query($fetch_query);
+              if ($result->num_rows > 0) {
+                $serving_numbers = "";
+                $count = 1;
+                while ($row = $result->fetch_assoc()) {
+                  $qn = $row['queue_number'];
+                  if ($count == $result->num_rows) {
+                    $serving_numbers .= $qn;
+                  } else {
+                    $serving_numbers .= $qn.', ';
+                  }
+                  $count += 1;
                 }
+                echo '
+                  <h6 class="fira-sans-regular color-light-white">
+                    Serving at the counter: <b>'.$serving_numbers.'</b>
+                  </h6>
+                ';
               }
             ?>
             <hr style="width: 100%" />
@@ -96,12 +113,27 @@
                 }
               ?>
             </p>
+            <h6 class="fira-sans-medium color-brown" style="align-self: flex-start;">
+              [SUMMARY] - <?php if (isset($_SESSION['checkout.order_type'])) echo $_SESSION['checkout.order_type']; ?>
+            </h6>
+            <p class="fira-sans-regular color-dark p-queue-orders" style="margin-top: 1px !important;">
+              <?php
+                if (isset($_SESSION['checkout.order_products'])) {
+                  $queue_orders = $_SESSION['checkout.order_products'];
+                  $converted_orders = json_decode($queue_orders, true);
+                  foreach ($converted_orders as $order) {
+                    $item = $order['item'];
+                    $quantity = strval($order['quantity']);
+                    $size = $order['size'];
+                    echo '<b class="color-brown">('.$quantity.')</b>&nbsp;'.$item.' - '.$size.'<br/>';
+                  }
+                }
+              ?>
+            </p>
             <br/>
-            <button
-              type="submit"
-              class="btn btn-md btn-outline-secondary btn-reset-queue">
-              <i class="fa-solid fa-rotate-right"></i>&nbsp;&nbsp;Reset Queue
-            </button>
+            <p class="fira-sans-regular color-dark size-10" style="text-align: left;">
+              "THIS DOCUMENT IS NOT VALID FOR CLAIM OF INPUT TAX"
+            </p>
           </div>
         </form>
       </div>
@@ -120,5 +152,36 @@
         window.location.href = "./";
       }, 10000);
     });
+  </script>
+  <script type="text/javascript">
+    <?php
+      if (isset($_SESSION['checkout.order_number'])) {
+        $order_number = $_SESSION['checkout.order_number'];
+        $fetch_query = "SELECT * FROM `queue` WHERE queue_payment_no = '".$order_number."'";
+        $result = $conn->query($fetch_query);
+        if ($result->num_rows > 0) {
+          $row = $result->fetch_assoc();
+          $qstat = $row['queue_status'];
+          $qs = $row['queue_serving'];
+          if ($qs == 'SERVED' && $qstat == 'INACTIVE') {
+            unset($_SESSION['checkout.for_queueing']);
+            unset($_SESSION['checkout.order_id']);
+            unset($_SESSION['checkout.order_number']);
+            unset($_SESSION['checkout.order_products']);
+            unset($_SESSION['checkout.order_type']);
+            unset($_SESSION['checkout.order_date']);
+            unset($_SESSION['checkout.order_time']);
+            unset($_SESSION['checkout.order_status']);
+            echo '
+              $(document).ready(() => {
+                setTimeout(() => {
+                  window.location.href = "../";
+                }, 1000);
+              });
+            ';
+          }
+        }
+      }
+    ?>
   </script>
 </html>
