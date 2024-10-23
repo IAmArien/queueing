@@ -26,14 +26,14 @@
   <body>
     <div class="div-classic-side-bar">
       <div class="div-sidebar-logo">
-        <i class="fa-solid fa-circle-user color-dark" style="font-size: 30pt; margin-top: -8px"></i>
+        <i class="fa-solid fa-circle-user color-white" style="font-size: 30pt; margin-top: -8px"></i>
         <div>
-          <h4 class="color-dark fira-sans-medium h6-title-name">
+          <h4 class="color-white fira-sans-medium h6-title-name">
             <?php
               echo $_SESSION['first_name']." ".$_SESSION['last_name'];
             ?>
           </h4>
-          <p class="color-dark fira-sans-regular p-title-email">
+          <p class="color-white fira-sans-regular p-title-email">
             <?php
               echo $_SESSION['email'];
             ?>

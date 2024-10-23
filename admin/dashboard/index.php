@@ -26,14 +26,14 @@
   <body>
     <div class="div-classic-side-bar">
       <div class="div-sidebar-logo">
-        <i class="fa-solid fa-circle-user color-dark" style="font-size: 30pt; margin-top: -8px"></i>
+        <i class="fa-solid fa-circle-user color-white" style="font-size: 30pt; margin-top: -8px"></i>
         <div>
-          <h4 class="color-dark fira-sans-medium h6-title-name">
+          <h4 class="color-white fira-sans-medium h6-title-name">
             <?php
               echo $_SESSION['first_name']." ".$_SESSION['last_name'];
             ?>
           </h4>
-          <p class="color-dark fira-sans-regular p-title-email">
+          <p class="color-white fira-sans-regular p-title-email">
             <?php
               echo $_SESSION['email'];
             ?>
@@ -110,7 +110,153 @@
           </a>
         </div>
       </nav>
-      <div class="container" style="padding-inline: 30px; margin-top: 20px;">
+      <div class="container" style="padding-inline: 30px; margin-top: 10px;">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #146c43;">
+                <i class="fa-solid fa-credit-card"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `for_payment` WHERE order_status = 'FOR PAYMENT'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>For Payment</b> transactions
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #007bff;">
+                <i class="fa-solid fa-credit-card"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `for_payment` WHERE order_status = 'PAID'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>PAID</b> transactions
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #dc3545;">
+                <i class="fa-solid fa-credit-card"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `for_payment` WHERE order_status = 'CANCELLED'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>CANCELLED</b> transactions
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #6c757d;">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `queue` WHERE queue_serving = 'PREPARING'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>PREPARING</b> orders
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #ffc107;">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `queue` WHERE queue_serving = 'SERVING'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>SERVING</b> orders
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="div-card">
+              <div class="div-card-icon" style="background-color: #17a2b8;">
+                <i class="fa-solid fa-tags"></i>
+              </div>
+              <div class="div-card-content">
+                <h3 class="fira-sans-medium size-16" style="margin-bottom: 0px !important;">
+                  <?php
+                    $fetch_query = "SELECT count(*) FROM `queue` WHERE queue_serving = 'SERVED'";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      $row = $result->fetch_assoc();
+                      echo $row['count(*)'];
+                    } else {
+                      echo '0';
+                    }
+                  ?>
+                </h3>
+                <p class="fira-sans-regular size-10" style="margin-bottom: 0px !important;">
+                  Total No. of <b>SERVED</b> orders
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </body>

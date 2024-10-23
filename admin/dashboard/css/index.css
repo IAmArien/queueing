@@ -20,7 +20,7 @@
   top: 0px;
   bottom: 0px;
   width: 300px;
-  background-color: var(--light-white);
+  background-color: #0E2C43;
 }
 
 .div-sidebar-logo {
@@ -56,7 +56,7 @@
   padding-top: 10px !important;
   padding-bottom: 10px !important;
   padding-left: 18px;;
-  border-color: var(--dark);
+  color: var(--white)
 }
 
 .btn-menu.active {
@@ -82,4 +82,36 @@
   padding-inline: 7px;
   padding-block: 3px;
   border-radius: 5px;
+}
+
+.div-card {
+  display: flex;
+  flex-direction: row;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px #c5c4c4;
+  height: 100px;
+  margin-top: 25px;
+}
+
+.div-card-icon {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  color: #ffffff;
+  font-size: 25pt;
+}
+
+.div-card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding: 10px;
 }
