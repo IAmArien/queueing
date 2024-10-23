@@ -132,6 +132,9 @@
       $('#btn-for-payment').click(() => {
         window.location.href = "../for_payment";
       });
+      $('#btn-orders').click(() => {
+        window.location.href = "../orders";
+      });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";
       })

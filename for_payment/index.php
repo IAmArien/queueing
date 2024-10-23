@@ -28,6 +28,11 @@
     <div class="container">
       <div class="div-queue-wrapper">
         <form action="../actions/requeue.php" method="POST">
+          <input
+            type="hidden"
+            name="order_id"
+            value="<?php if (isset($_SESSION['checkout.order_id'])) echo $_SESSION['checkout.order_id']; ?>"
+          />
           <div class="div-queue-container">
             <h4 class="fira-sans-medium color-brown" style="margin-top: 15px;">
               [FOR PAYMENT]
@@ -52,7 +57,7 @@
             </p>
             <hr style="width: 100%" />
             <p class="fira-sans-regular color-dark" style="text-align: left;">
-              Kindly present this stub at the counter when it's your turn for payment.
+              Kindly present this stub at the counter for the payment of your orders.
             </p>
             <h1 class="fira-sans-bold color-brown" style="text-align: center;">
               Serving No. #<?php if (isset($_SESSION['checkout.order_id'])) echo $_SESSION['checkout.order_id']; ?>

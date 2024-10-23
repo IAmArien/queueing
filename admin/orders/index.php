@@ -54,6 +54,17 @@
         </button>
         <button
           id="btn-for-payment"
+          class="btn btn-outline-success btn-sm
+            fira-sans-medium 
+            size-13 
+            color-dark 
+            btn-menu 
+            btn-menu-selected"
+          type="button">
+          <i class="fa-solid fa-credit-card"></i><span style="padding-left: 16px">For Payment</span>
+        </button>
+        <button
+          id="btn-orders"
           class="btn btn-success btn-sm
             fira-sans-medium 
             size-13 
@@ -61,17 +72,6 @@
             btn-menu 
             btn-menu-selected
             active"
-          type="button">
-          <i class="fa-solid fa-credit-card"></i><span style="padding-left: 16px">For Payment</span>
-        </button>
-        <button
-          id="btn-orders"
-          class="btn btn-outline-success btn-sm
-            fira-sans-medium 
-            size-13 
-            color-dark 
-            btn-menu 
-            btn-menu-selected"
           type="button">
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
@@ -106,7 +106,7 @@
             &nbsp;&nbsp;&nbsp;<i id="navbar-control" class="fa-solid fa-bars" style="cursor: pointer"></i>
             &nbsp;&nbsp;&nbsp;&nbsp;<b>Admin</b>&nbsp;
             <i class="fa-solid fa-chevron-right"></i>
-            &nbsp;For Payment
+            &nbsp;Orders Management
           </a>
         </div>
       </nav>
@@ -114,88 +114,117 @@
         <table id="data" class="table table-striped" style="width:100%">
           <thead>
             <tr>
-              <th class="fira-sans-medium">Order Number</th>
+              <th class="fira-sans-medium">Payment No</th>
+              <th class="fira-sans-medium">Queue</th>
               <th class="fira-sans-medium">Orders</th>
               <th class="fira-sans-medium">Order Type</th>
+              <th class="fira-sans-medium">Activity</th>
               <th class="fira-sans-medium">Date / Time</th>
-              <th class="fira-sans-medium">Price</th>
-              <th class="fira-sans-medium">Order Type</th>
+              <th class="fira-sans-medium">Status</th>
               <th class="fira-sans-medium"></th>
             </tr>
           </thead>
           <tbody>
             <?php
-              $fetch_query = "SELECT * FROM `for_payment`";
+              $fetch_query = "SELECT * FROM `queue` ORDER BY id DESC";
               $result = $conn->query($fetch_query);
               if ($result->num_rows > 0) {
                 while ($row = $result->fetch_assoc()) {
-                  $id = $row['id'];
-                  $order_number = $row['order_number'];
-                  $order_date = $row['order_date'];
-                  $order_time = $row['order_time'];
-                  $order_status = $row['order_status'];
-                  $order_products = $row['order_products'];
-                  $order_type = $row['order_type'];
-                  $span_class = 'badge-disabled';
-                  $order_prices = 0;
-                  $orders = '';
-                  $approve_transaction_state = '';
-                  $cancel_transaction_state = '';
-                  $print_receipt_state = '';
-                  if ($order_status == 'FOR PAYMENT') {
-                    $span_class = 'badge-warning';
-                    $print_receipt_state = 'disabled';
-                  } else if ($order_status == 'PAID') {
-                    $span_class = 'badge-enabled';
-                    $approve_transaction_state = 'disabled';
-                    $cancel_transaction_state = 'disabled';
-                  } else if ($order_status == 'CANCELLED') {
-                    $span_class = 'badge-disabled';
-                    $approve_transaction_state = 'disabled';
-                    $print_receipt_state = 'disabled';
+                  $queue_id = $row['id'];
+                  $queue_payment_no = $row['queue_payment_no'];
+                  $queue_number = $row['queue_number'];
+                  $queue_serving = $row['queue_serving'];
+                  $queue_date = $row['queue_date'];
+                  $queue_time = $row['queue_time'];
+                  $queue_status = $row['queue_status'];
+
+                  $fetch_query = "SELECT * FROM `queue_orders` WHERE queue_number_id = ".$queue_id." LIMIT 1";
+                  $orders_result = $conn->query($fetch_query);
+                  if ($orders_result->num_rows > 0) {
+                    $orders_row = $orders_result->fetch_assoc();
+                    $order_id = $orders_row['id'];
+                    $queue_order = $orders_row['queue_order'];
+                    $queue_order_type = $orders_row['queue_order_type'];
+
+                    $serving_span_class = 'badge-warning';
+                    if ($queue_serving == 'PREPARING') {
+                      $serving_span_class = 'badge-warning';
+                    } else if ($queue_serving == 'SERVING') {
+                      $serving_span_class = 'badge-primary';
+                    } else if ($queue_serving == 'SERVED') {
+                      $serving_span_class = 'badge-enabled';
+                    }
+
+                    $status_span_class = 'badge-disabled';
+                    if ($queue_status == 'ACTIVE') {
+                      $status_span_class = 'badge-enabled';
+                    }
+
+                    $serving_state = '';
+                    if ($queue_serving == 'PREPARING') {
+                      $serving_state = '';
+                    } else if ($queue_serving == 'SERVING') {
+                      $serving_state = 'disabled';
+                    } else if ($queue_serving == 'SERVED') {
+                      $serving_state = 'disabled';
+                    }
+
+                    $served_state = '';
+                    if ($queue_serving == 'PREPARING') {
+                      $served_state = 'disabled';
+                    } else if ($queue_serving == 'SERVING') {
+                      $served_state = '';
+                    } else if ($queue_serving == 'SERVED') {
+                      $served_state = 'disabled';
+                    }
+
+                    $orders = '';
+                    $d_order = json_decode($queue_order, true);
+                    foreach ($d_order as $order) {
+                      $item = $order['item'];
+                      $price = intval($order['price']);
+                      $quantity = intval($order['quantity']);
+                      $size = $order['size'];
+                      $order_prices += ($price * $quantity);
+                      $orders .= '(<b>'.strval($quantity).'</b>) '.$item.' - '.$size.'<br/>';
+                    }
+
+                    echo '
+                      <tr>
+                        <td class="color-brown fira-sans-medium">No. '.$queue_payment_no.'</td>
+                        <td class="color-dark fira-sans-medium">
+                          '.$queue_number.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          '.$orders.'
+                        </td>
+                        <td class="color-dark fira-sans-medium">
+                          '.$queue_order_type.'
+                        </td>
+                        <td class="fira-sans-regular">
+                          <span class="'.$serving_span_class.'">'.$queue_serving.'</span>
+                        </td>
+                        <td class="color-dark fira-sans-regular size-13">
+                          '.$queue_date.'<br/>'.$queue_time.'
+                        </td>
+                        <td class="fira-sans-regular">
+                          <span class="'.$status_span_class.'">'.$queue_status.'</span>
+                        </td>
+                        <td>
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              ACTIONS
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                              <li><a class="dropdown-item disabled" href="#">Change to Preparing</a></li>
+                              <li><a class="dropdown-item '.$serving_state.'" href="#">Change To Serving</a></li>
+                              <li><a class="dropdown-item '.$served_state.'" href="#">Change To Served</a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ';
                   }
-                  $d_order = json_decode($order_products, true);
-                  foreach ($d_order as $order) {
-                    $item = $order['item'];
-                    $price = intval($order['price']);
-                    $quantity = intval($order['quantity']);
-                    $size = $order['size'];
-                    $order_prices += ($price * $quantity);
-                    $orders .= '(<b>'.strval($quantity).'</b>) '.$item.' - '.$size.'<br/>';
-                  }
-                  echo '
-                    <tr>
-                      <td class="color-brown fira-sans-medium">No. '.$order_number.'</td>
-                      <td class="color-dark fira-sans-regular">
-                        '.$orders.'
-                      </td>
-                      <td class="fira-sans-regular">
-                        <span class="'.$span_class.'">'.$order_status.'</span>
-                      </td>
-                       <td class="color-dark fira-sans-regular size-13">
-                        '.$order_date.'<br/>'.$order_time.'
-                      </td>
-                      <td class="color-dark fira-sans-medium size-13">
-                        ₱'.$order_prices.'
-                      </td>
-                      <td class="color-dark fira-sans-medium size-13">
-                        '.$order_type.'
-                      </td>
-                      <td>
-                        <div class="dropdown">
-                          <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            ACTIONS
-                          </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item '.$approve_transaction_state.'" href="../../actions/prepare.php?order_id='.$id.'">Approve Transaction</a></li>
-                            <li><a class="dropdown-item '.$cancel_transaction_state.'" href="#">Cancel Transaction</a></li>
-                            <li><a class="dropdown-item" href="#">View Details</a></li>
-                            <li><a class="dropdown-item '.$print_receipt_state.'" href="#">Print Receipt</a></li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  ';
                 }
               }
             ?>
@@ -218,13 +247,13 @@
       $('#data').dataTable({
         'bLengthChange': true,
         'searching': true,
-        'order': [[3, 'desc']]
+        'order': [[5, 'desc']]
       });
       $('#btn-dashboard').click(() => {
         window.location.href = "../dashboard";
       });
-      $('#btn-orders').click(() => {
-        window.location.href = "../orders";
+      $('#btn-for-payment').click(() => {
+        window.location.href = "../for_payment";
       });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";
