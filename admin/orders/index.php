@@ -247,7 +247,7 @@
       $('#data').dataTable({
         'bLengthChange': true,
         'searching': true,
-        'order': [[5, 'desc']]
+        'order': [[6, 'asc']]
       });
       $('#btn-dashboard').click(() => {
         window.location.href = "../dashboard";
