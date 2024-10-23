@@ -226,6 +226,9 @@
       $('#btn-orders').click(() => {
         window.location.href = "../orders";
       });
+      $('#btn-cashier').click(() => {
+        window.location.href = "../cashier";
+      });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";
       })

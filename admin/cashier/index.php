@@ -43,13 +43,12 @@
       <div class="div-siderbar-menu-links">
         <button
           id="btn-dashboard"
-          class="btn btn-success btn-sm
+          class="btn btn-outline-success btn-sm
             fira-sans-medium 
             size-13 
             color-dark 
             btn-menu 
-            btn-menu-selected 
-            active"
+            btn-menu-selected"
           type="button">
           <i class="fa-solid fa-gauge-high"></i><span style="padding-left: 16px">&nbsp;Dashboard</span>
         </button>
@@ -77,12 +76,13 @@
         </button>
         <button
           id="btn-cashier"
-          class="btn btn-outline-success btn-sm
+          class="btn btn-success btn-sm
             fira-sans-medium 
             size-13 
             color-dark 
             btn-menu 
-            btn-menu-selected"
+            btn-menu-selected
+            active"
           type="button">
           <i class="fa-solid fa-users"></i><span style="padding-left: 16px">Cashier Management</span>
         </button>
@@ -106,11 +106,75 @@
             &nbsp;&nbsp;&nbsp;<i id="navbar-control" class="fa-solid fa-bars" style="cursor: pointer"></i>
             &nbsp;&nbsp;&nbsp;&nbsp;<b>Admin</b>&nbsp;
             <i class="fa-solid fa-chevron-right"></i>
-            &nbsp;Dashboard
+            &nbsp;Cashier Management
           </a>
         </div>
       </nav>
       <div class="container" style="padding-inline: 30px; margin-top: 20px;">
+        <table id="data" class="table table-striped" style="width:100%">
+          <thead>
+            <tr>
+              <th class="fira-sans-medium">User ID</th>
+              <th class="fira-sans-medium">First Name (Cashier)</th>
+              <th class="fira-sans-medium">Last Name (Cashier)</th>
+              <th class="fira-sans-medium">Email</th>
+              <th class="fira-sans-medium">Contact Number</th>
+              <th class="fira-sans-medium"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              $fetch_query = "SELECT 
+                UC.id,
+                UI.first_name,
+                UI.last_name,
+                UI.email,
+                UI.contact_number 
+                FROM `user_credentials` AS UC 
+                INNER JOIN `user_info` AS UI ON UC.id = UI.user_id 
+                WHERE UC.type != 'admin'";
+              $result = $conn->query($fetch_query);
+              if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                  $user_id = $row['id'];
+                  $first_name = $row['first_name'];
+                  $last_name = $row['last_name'];
+                  $email = $row['email'];
+                  $contact_number = $row['contact_number'];
+
+                  echo '
+                    <tr>
+                      <td class="color-brown fira-sans-medium">No. '.$user_id.'</td>
+                      <td class="color-dark fira-sans-regular">
+                        '.$first_name.'
+                      </td>
+                      <td class="color-dark fira-sans-regular">
+                        '.$last_name.'
+                      </td>
+                      <td class="color-dark fira-sans-medium">
+                        '.$email.'
+                      </td>
+                      <td class="fira-sans-regular">
+                        '.$contact_number.'
+                      </td>
+                      <td>
+                        <div class="dropdown">
+                          <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            ACTIONS
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" href="#">Edit Cashier Details</a></li>
+                            <li><a class="dropdown-item" href="#">Delete Cashier User</a></li>
+                          </ul>
+                        </div>
+                      </td>
+                    </tr>
+                  ';
+                }
+              }
+            ?>
+          </tbody>
+        </table>
       </div>
     </div>
   </body>
@@ -127,16 +191,17 @@
     $(document).ready(() => {
       $('#data').dataTable({
         'bLengthChange': false,
-        'searching': false
+        'searching': false,
+        'order': [[0, 'desc']]
+      });
+      $('#btn-dashboard').click(() => {
+        window.location.href = "../dashboard";
       });
       $('#btn-for-payment').click(() => {
         window.location.href = "../for_payment";
       });
       $('#btn-orders').click(() => {
         window.location.href = "../orders";
-      });
-      $('#btn-cashier').click(() => {
-        window.location.href = "../cashier";
       });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";

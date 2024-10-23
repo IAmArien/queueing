@@ -255,6 +255,9 @@
       $('#btn-for-payment').click(() => {
         window.location.href = "../for_payment";
       });
+      $('#btn-cashier').click(() => {
+        window.location.href = "../cashier";
+      });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";
       })
