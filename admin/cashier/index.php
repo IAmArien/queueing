@@ -4,6 +4,11 @@
   if (!isset($_SESSION['user.credentials.username'])) {
     header('Location: ../');
   }
+  if (isset($_SESSION['session.user_type'])) {
+    if ($_SESSION['session.user_type'] == 'CASHIER') {
+      header('Location: ../dashboard');
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -75,17 +75,25 @@
           type="button">
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
-        <button
-          id="btn-cashier"
-          class="btn btn-outline-success btn-sm
-            fira-sans-medium 
-            size-13 
-            color-dark 
-            btn-menu 
-            btn-menu-selected"
-          type="button">
-          <i class="fa-solid fa-users"></i><span style="padding-left: 16px">Cashier Management</span>
-        </button>
+        <?php
+          if (isset($_SESSION['session.user_type'])) {
+            if ($_SESSION['session.user_type'] == 'ADMIN') {
+              echo '
+                <button
+                  id="btn-cashier"
+                  class="btn btn-outline-success btn-sm
+                    fira-sans-medium 
+                    size-13 
+                    color-dark 
+                    btn-menu 
+                    btn-menu-selected"
+                  type="button">
+                  <i class="fa-solid fa-users"></i><span style="padding-left: 16px">Cashier Management</span>
+                </button>
+              ';
+            }
+          }
+        ?>
         <button
           id="btn-logout"
           class="btn btn-outline-success btn-sm

@@ -15,7 +15,7 @@
       FROM user_credentials AS UC 
       INNER JOIN user_info AS UI 
       ON UC.id = UI.user_id 
-      WHERE UC.email = '".$username."' AND UC.password = '".$hashed_password."' AND type = 'admin'";
+      WHERE UC.email = '".$username."' AND UC.password = '".$hashed_password."' AND type = 'cashier'";
     echo $fetch_query;
     $result = $conn->query($fetch_query);
     if ($result->num_rows > 0) {
@@ -24,7 +24,7 @@
       $last_name = $row['last_name'];
       $email = $row['email'];
       $user_id = $row['user_id'];
-      $_SESSION['session.user_type'] = 'ADMIN';
+      $_SESSION['session.user_type'] = 'CASHIER';
       $_SESSION['user.credentials.username'] = $username;
       $_SESSION['first_name'] = $first_name;
       $_SESSION['last_name'] = $last_name;
