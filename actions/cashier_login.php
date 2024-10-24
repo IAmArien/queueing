@@ -34,10 +34,10 @@
       header('Location: ../admin/dashboard/');
     } else {
       $_SESSION['user.error.message'] = 'Invalid username or password';
-      header('Location: ../admin/');
+      header('Location: ../cashier/');
     }
   } else {
     $_SESSION['user.error.message'] = 'Invalid username or password';
-    header('Location: ../admin/');
+    header('Location: ../cashier/');
   }
 ?>

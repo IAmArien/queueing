@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>JMoa's Cafe&trade; (Admin)</title>
+    <title>JMoa's Cafe&trade; (<?php if (isset($_SESSION['session.user_type'])) echo $_SESSION['session.user_type']; else echo 'Admin'; ?>)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
@@ -112,7 +112,7 @@
         <div class="container-fluid">
           <a class="navbar-brand fira-sans-regular color-dark a-navbar-path" href="#" style="cursor: default;">
             &nbsp;&nbsp;&nbsp;<i id="navbar-control" class="fa-solid fa-bars" style="cursor: pointer"></i>
-            &nbsp;&nbsp;&nbsp;&nbsp;<b>Admin</b>&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;<b><?php if (isset($_SESSION['session.user_type'])) echo $_SESSION['session.user_type']; else 'Admin'; ?></b>&nbsp;
             <i class="fa-solid fa-chevron-right"></i>
             &nbsp;Orders Management
           </a>
