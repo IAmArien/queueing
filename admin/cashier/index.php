@@ -172,7 +172,7 @@
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item" href="#">Edit Cashier Details</a></li>
-                            <li><a class="dropdown-item" href="#">Delete Cashier User</a></li>
+                            <li><a class="dropdown-item" href="../../actions/delete_cashier.php?user_id='.$user_id.'">Delete Cashier User</a></li>
                           </ul>
                         </div>
                       </td>
