@@ -111,6 +111,14 @@
         </div>
       </nav>
       <div class="container" style="padding-inline: 30px; margin-top: 20px;">
+        <div class="div-action-buttons">
+          <button
+            class="btn btn-primary btn-sm fira-sans-regular"
+            data-bs-toggle="modal"
+            data-bs-target="#staticAddNewCashier">
+            <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;Add New Cashier
+          </button>
+        </div>
         <table id="data" class="table table-striped" style="width:100%">
           <thead>
             <tr>
@@ -144,7 +152,7 @@
 
                   echo '
                     <tr>
-                      <td class="color-brown fira-sans-medium">No. '.$user_id.'</td>
+                      <td class="color-brown fira-sans-medium">'.$user_id.'</td>
                       <td class="color-dark fira-sans-regular">
                         '.$first_name.'
                       </td>
@@ -178,6 +186,99 @@
       </div>
     </div>
   </body>
+  <div
+    class="modal fade" 
+    id="staticAddNewCashier" 
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false" 
+    tabindex="-1" 
+    aria-labelledby="staticBackdropLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <form action="../../actions/add_cashier.php" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Add New Cashier User</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p
+              class="fira-sans-regular color-dark"
+              style="margin-bottom: 15px;">
+              Please fill up all the fields to create a new user for <b>Cashier</b>.
+            </p>
+            <div class="div-field-cashier">
+              <input
+                name="first_name"
+                type="text"
+                class="form-control fira-sans-regular"
+                placeholder="First Name"
+                required
+              />
+              <input
+                name="last_name"
+                type="text"
+                class="form-control fira-sans-regular"
+                placeholder="Last Name"
+                required
+              />
+            </div>
+            <div class="div-field-cashier" style="margin-top: 12px;">
+              <input
+                name="email"
+                type="email"
+                class="form-control fira-sans-regular"
+                placeholder="Email Address (eg. juandelacruz@gmail.com)"
+                required
+              />
+              <input
+                name="contact_number"
+                type="text"
+                class="form-control fira-sans-regular"
+                placeholder="Contact Number (eg. 091234567890)"
+                required
+              />
+            </div>
+            <p
+              class="fira-sans-regular color-dark"
+              style="margin-bottom: 15px; margin-top: 20px;">
+              Please input a valid <b>Password</b> for this user.<br/>Make sure both of the new password 
+              and confirm password is match.
+            </p>
+            <div class="div-field-cashier" style="margin-top: 12px;">
+              <input
+                name="cashier_password"
+                type="password"
+                class="form-control fira-sans-regular"
+                placeholder="Cashier New Password"
+                required
+              />
+              <input
+                name="cashier_confirm_password"
+                type="password"
+                class="form-control fira-sans-regular"
+                placeholder="Cashier Confirm Password"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-secondary fira-sans-medium">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success fira-sans-medium">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/b2e03e5a6f.js" crossorigin="anonymous"></script>
   <script

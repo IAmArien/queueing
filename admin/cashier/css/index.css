@@ -99,3 +99,16 @@
   padding-block: 3px;
   border-radius: 5px;
 }
+
+.div-action-buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.div-field-cashier {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
