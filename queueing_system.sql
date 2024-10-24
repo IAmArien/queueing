@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 17, 2024 at 04:45 PM
+-- Generation Time: Oct 24, 2024 at 02:03 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.0.28
 
@@ -49,7 +49,11 @@ INSERT INTO `for_payment` (`id`, `order_number`, `order_products`, `order_type`,
 (8, '1392058831', '[{\"item\":\"Buko Shake\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Guyabano Shake\",\"size\":\"Grande\",\"price\":70,\"quantity\":3}]', 'TAKE OUT', '2024/10/16', '06:04:39pm', 'CANCELLED'),
 (9, '108434794', '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Mango Fruit\",\"size\":\"Grande\",\"price\":90,\"quantity\":3}]', 'TAKE OUT', '2024/10/17', '03:50:32pm', 'PAID'),
 (10, '506765387', '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Mango Shake\",\"size\":\"Grande\",\"price\":60,\"quantity\":2}]', 'TAKE OUT', '2024/10/17', '04:36:36pm', 'PAID'),
-(11, '368275967', '[{\"item\":\"Blueberry (Tea-based)\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Konnichiwa (Okinawa)\",\"size\":\"Grande\",\"price\":95,\"quantity\":4},{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":1},{\"item\":\"Fruiti Banana\",\"size\":\"Medio\",\"price\":80,\"quantity\":1},{\"item\":\"Fruiti Melon\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/17', '04:42:05pm', 'PAID');
+(11, '368275967', '[{\"item\":\"Blueberry (Tea-based)\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Konnichiwa (Okinawa)\",\"size\":\"Grande\",\"price\":95,\"quantity\":4},{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":1},{\"item\":\"Fruiti Banana\",\"size\":\"Medio\",\"price\":80,\"quantity\":1},{\"item\":\"Fruiti Melon\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/17', '04:42:05pm', 'PAID'),
+(12, '1021631099', '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Fruiti Buko\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/22', '02:45:14pm', 'PAID'),
+(13, '1691554122', '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Green Apple (Lemonade)\",\"size\":\"Grande\",\"price\":70,\"quantity\":3},{\"item\":\"Classic Lemon\",\"size\":\"Medio\",\"price\":60,\"quantity\":2}]', 'DINE IN', '2024/10/22', '02:49:06pm', 'CANCELLED'),
+(14, '18788830', '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":3}]', 'DINE IN', '2024/10/22', '02:53:44pm', 'CANCELLED'),
+(15, '2137664550', '[{\"item\":\"Mango Shake\",\"size\":\"Medio\",\"price\":50,\"quantity\":4}]', 'TAKE OUT', '2024/10/22', '02:55:18pm', 'PAID');
 
 -- --------------------------------------------------------
 
@@ -72,13 +76,15 @@ CREATE TABLE `queue` (
 --
 
 INSERT INTO `queue` (`id`, `queue_payment_no`, `queue_number`, `queue_serving`, `queue_date`, `queue_time`, `queue_status`) VALUES
-(68, '1855691011', '1', 'PREPARING', '2024/10/16', '05:56:26pm', 'ACTIVE'),
+(68, '1855691011', '1', 'SERVED', '2024/10/16', '05:56:26pm', 'INACTIVE'),
 (69, '1539655343', '2', 'SERVING', '2024/10/16', '05:56:27pm', 'ACTIVE'),
 (70, '2066656612', '3', 'PREPARING', '2024/10/16', '06:00:01pm', 'ACTIVE'),
 (71, '1392058831', '4', 'PREPARING', '2024/10/16', '06:04:51pm', 'ACTIVE'),
 (72, '108434794', '5', 'SERVED', '2024/10/17', '03:51:43pm', 'ACTIVE'),
 (73, '506765387', '6', 'SERVED', '2024/10/17', '04:38:16pm', 'ACTIVE'),
-(74, '368275967', '7', 'SERVED', '2024/10/17', '04:42:36pm', 'INACTIVE');
+(74, '368275967', '7', 'SERVED', '2024/10/17', '04:42:36pm', 'INACTIVE'),
+(75, '1021631099', '8', 'SERVED', '2024/10/22', '02:47:10pm', 'INACTIVE'),
+(76, '2137664550', '9', 'SERVED', '2024/10/22', '02:57:25pm', 'INACTIVE');
 
 -- --------------------------------------------------------
 
@@ -106,7 +112,9 @@ INSERT INTO `queue_orders` (`id`, `queue_number_id`, `queue_order`, `queue_order
 (63, 71, '[{\"item\":\"Buko Shake\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Guyabano Shake\",\"size\":\"Grande\",\"price\":70,\"quantity\":3}]', 'TAKE OUT', '2024/10/16', '06:04:51pm'),
 (64, 72, '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Mango Fruit\",\"size\":\"Grande\",\"price\":90,\"quantity\":3}]', 'TAKE OUT', '2024/10/17', '03:51:43pm'),
 (65, 73, '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Mango Shake\",\"size\":\"Grande\",\"price\":60,\"quantity\":2}]', 'TAKE OUT', '2024/10/17', '04:38:16pm'),
-(66, 74, '[{\"item\":\"Blueberry (Tea-based)\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Konnichiwa (Okinawa)\",\"size\":\"Grande\",\"price\":95,\"quantity\":4},{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":1},{\"item\":\"Fruiti Banana\",\"size\":\"Medio\",\"price\":80,\"quantity\":1},{\"item\":\"Fruiti Melon\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/17', '04:42:36pm');
+(66, 74, '[{\"item\":\"Blueberry (Tea-based)\",\"size\":\"Medio\",\"price\":50,\"quantity\":3},{\"item\":\"Konnichiwa (Okinawa)\",\"size\":\"Grande\",\"price\":95,\"quantity\":4},{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":1},{\"item\":\"Fruiti Banana\",\"size\":\"Medio\",\"price\":80,\"quantity\":1},{\"item\":\"Fruiti Melon\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/17', '04:42:36pm'),
+(67, 75, '[{\"item\":\"Guyabano Shake\",\"size\":\"Medio\",\"price\":60,\"quantity\":4},{\"item\":\"Fruiti Buko\",\"size\":\"Grande\",\"price\":90,\"quantity\":4}]', 'TAKE OUT', '2024/10/22', '02:47:10pm'),
+(68, 76, '[{\"item\":\"Mango Shake\",\"size\":\"Medio\",\"price\":50,\"quantity\":4}]', 'TAKE OUT', '2024/10/22', '02:57:25pm');
 
 -- --------------------------------------------------------
 
@@ -126,7 +134,8 @@ CREATE TABLE `user_credentials` (
 --
 
 INSERT INTO `user_credentials` (`id`, `email`, `password`, `type`) VALUES
-(1, 'jerome.abrera@gmail.com', 'cc03e747a6afbbcbf8be7668acfebee5', 'admin');
+(1, 'jerome.abrera@gmail.com', 'cc03e747a6afbbcbf8be7668acfebee5', 'admin'),
+(10, 'maraiah.queen@arceta.com', 'cc03e747a6afbbcbf8be7668acfebee5', 'cashier');
 
 -- --------------------------------------------------------
 
@@ -139,15 +148,17 @@ CREATE TABLE `user_info` (
   `user_id` int(11) NOT NULL,
   `first_name` varchar(255) NOT NULL,
   `last_name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL
+  `email` varchar(255) NOT NULL,
+  `contact_number` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_info`
 --
 
-INSERT INTO `user_info` (`id`, `user_id`, `first_name`, `last_name`, `email`) VALUES
-(1, 1, 'Jerome', 'Abrera', 'jerome.abrera@gmail.com');
+INSERT INTO `user_info` (`id`, `user_id`, `first_name`, `last_name`, `email`, `contact_number`) VALUES
+(1, 1, 'Jerome', 'Abrera', 'jerome.abrera@gmail.com', '091234567890'),
+(2, 10, 'Maraiah Queen', 'Arceta', 'maraiah.queen@arceta.com', '091234567890');
 
 --
 -- Indexes for dumped tables
@@ -175,14 +186,16 @@ ALTER TABLE `queue_orders`
 -- Indexes for table `user_credentials`
 --
 ALTER TABLE `user_credentials`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `user_info`
 --
 ALTER TABLE `user_info`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user_id` (`user_id`);
+  ADD UNIQUE KEY `user_id` (`user_id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -192,31 +205,31 @@ ALTER TABLE `user_info`
 -- AUTO_INCREMENT for table `for_payment`
 --
 ALTER TABLE `for_payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `queue`
 --
 ALTER TABLE `queue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `queue_orders`
 --
 ALTER TABLE `queue_orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `user_credentials`
 --
 ALTER TABLE `user_credentials`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user_info`
 --
 ALTER TABLE `user_info`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
