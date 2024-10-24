@@ -153,6 +153,7 @@
                     $span_class = 'badge-disabled';
                     $approve_transaction_state = 'disabled';
                     $print_receipt_state = 'disabled';
+                    $cancel_transaction_state = 'disabled';
                   }
                   $d_order = json_decode($order_products, true);
                   foreach ($d_order as $order) {
@@ -188,8 +189,7 @@
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item '.$approve_transaction_state.'" href="../../actions/prepare.php?order_id='.$id.'">Approve Transaction</a></li>
-                            <li><a class="dropdown-item '.$cancel_transaction_state.'" href="#">Cancel Transaction</a></li>
-                            <li><a class="dropdown-item" href="#">View Details</a></li>
+                            <li><a class="dropdown-item '.$cancel_transaction_state.'" href="../../actions/cancel.php?order_id='.$id.'">Cancel Transaction</a></li>
                             <li><a class="dropdown-item '.$print_receipt_state.'" href="#">Print Receipt</a></li>
                           </ul>
                         </div>

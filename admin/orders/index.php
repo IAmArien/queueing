@@ -217,8 +217,8 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                               <li><a class="dropdown-item disabled" href="#">Change to Preparing</a></li>
-                              <li><a class="dropdown-item '.$serving_state.'" href="#">Change To Serving</a></li>
-                              <li><a class="dropdown-item '.$served_state.'" href="#">Change To Served</a></li>
+                              <li><a class="dropdown-item '.$serving_state.'" href="../../actions/serving.php?queue_id='.$queue_id.'">Change To Serving</a></li>
+                              <li><a class="dropdown-item '.$served_state.'" href="../../actions/serve.php?queue_id='.$queue_id.'">Change To Served</a></li>
                             </ul>
                           </div>
                         </td>
