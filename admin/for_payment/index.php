@@ -198,7 +198,7 @@
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                             <li><a class="dropdown-item '.$approve_transaction_state.'" href="../../actions/prepare.php?order_id='.$id.'">Approve Transaction</a></li>
                             <li><a class="dropdown-item '.$cancel_transaction_state.'" href="../../actions/cancel.php?order_id='.$id.'">Cancel Transaction</a></li>
-                            <li><a class="dropdown-item '.$print_receipt_state.'" href="#">Print Receipt</a></li>
+                            <li><a class="dropdown-item '.$print_receipt_state.'" href="../receipt/index.php?id='.$id.'&order_number='.$order_number.'">Print Receipt</a></li>
                           </ul>
                         </div>
                       </td>

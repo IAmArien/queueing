@@ -186,6 +186,7 @@
                       $served_state = 'disabled';
                     }
 
+                    $order_prices = 0;
                     $orders = '';
                     $d_order = json_decode($queue_order, true);
                     foreach ($d_order as $order) {
