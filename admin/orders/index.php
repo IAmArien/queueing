@@ -198,6 +198,14 @@
                       $orders .= '(<b>'.strval($quantity).'</b>) '.$item.' - '.$size.'<br/>';
                     }
 
+                    $for_payment_id = 0;
+                    $fetch_query = "SELECT id FROM `for_payment` WHERE order_number = '".$queue_payment_no."' LIMIT 1";
+                    $fp_result = $conn->query($fetch_query);
+                    if ($fp_result->num_rows > 0) {
+                      $fp_row = $fp_result->fetch_assoc();
+                      $for_payment_id = intval($fp_row['id']);
+                    }
+
                     echo '
                       <tr>
                         <td class="color-brown fira-sans-medium">No. '.$queue_payment_no.'</td>
@@ -228,6 +236,7 @@
                               <li><a class="dropdown-item disabled" href="#">Change to Preparing</a></li>
                               <li><a class="dropdown-item '.$serving_state.'" href="../../actions/serving.php?queue_id='.$queue_id.'">Change To Serving</a></li>
                               <li><a class="dropdown-item '.$served_state.'" href="../../actions/serve.php?queue_id='.$queue_id.'">Change To Served</a></li>
+                              <li><a class="dropdown-item" href="../receipt/index.php?id='.$for_payment_id.'&order_number='.$queue_payment_no.'">Print Receipt</a></li>
                             </ul>
                           </div>
                         </td>
