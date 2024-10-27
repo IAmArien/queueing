@@ -17,7 +17,9 @@
 
       if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
-        $current_queue = intval($row['queue_number']) + 1;
+        $str_qn = strval($row['queue_number']);
+        $replaced_qn = str_replace("0", "", $str_qn);;
+        $current_queue = intval($replaced_qn) + 1;
         $insert_query = "INSERT INTO `queue` (
           queue_payment_no,
           queue_number,
@@ -27,7 +29,20 @@
           queue_status
         ) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
-        $queue_number = strval($current_queue);
+        $queue_number = '';
+        if ($current_queue <= 9) {
+          $queue_number = '0000'.strval($current_queue);
+        } else if ($current_queue >= 10 && $current_queue <= 99) {
+          $queue_number = '000'.strval($current_queue);
+        } else if ($current_queue >= 100 && $current_queue <= 999) {
+          $queue_number = '00'.strval($current_queue);
+        } else if ($current_queue >= 1000 && $current_queue <= 9999) {
+          $queue_number = '0'.strval($current_queue);
+        } else if ($current_queue >= 10000 && $current_queue <= 99999) {
+          $queue_number = strval($current_queue);
+        } else {
+          $queue_number = strval($current_queue);
+        }
         $queue_date = date("Y/m/d");
         $queue_time = date("h:i:sa");
         $queue_serving = 'PREPARING';
@@ -93,7 +108,7 @@
           queue_status
         ) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
-        $queue_number = '1';
+        $queue_number = '00001';
         $date_time = date("Y/m/d").' '.date("h:i:sa");
         $queue_serving = 'PREPARING';
         $queue_status = 'ACTIVE';

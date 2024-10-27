@@ -60,7 +60,7 @@
               Kindly present this stub at the counter for the payment of your orders.
             </p>
             <h1 class="fira-sans-bold color-brown" style="text-align: center;">
-              Serving No. #<?php if (isset($_SESSION['checkout.order_id'])) echo $_SESSION['checkout.order_id']; ?>
+              No. #<?php if (isset($_SESSION['checkout.order_number'])) echo $_SESSION['checkout.order_number']; ?>
             </h1>
             <hr style="width: 100%" />
             <h6 class="fira-sans-medium color-brown" style="margin-top: 15px; align-self: flex-start;">
