@@ -75,6 +75,28 @@
           type="button">
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
+        <button
+          id="btn-menu"
+          class="btn btn-outline-success btn-sm
+            fira-sans-medium 
+            size-13 
+            color-dark 
+            btn-menu 
+            btn-menu-selected"
+          type="button">
+          <i class="fa-solid fa-bars"></i><span style="padding-left: 16px">&nbsp;Menu Management</span>
+        </button>
+        <button
+          id="btn-products"
+          class="btn btn-outline-success btn-sm
+            fira-sans-medium 
+            size-13 
+            color-dark 
+            btn-menu 
+            btn-menu-selected"
+          type="button">
+          <i class="fa-solid fa-mug-hot"></i><span style="padding-left: 16px">&nbsp;Product Management</span>
+        </button>
         <?php
           if (isset($_SESSION['session.user_type'])) {
             if ($_SESSION['session.user_type'] == 'ADMIN') {
@@ -288,6 +310,12 @@
       });
       $('#btn-orders').click(() => {
         window.location.href = "../orders";
+      });
+      $('#btn-menu').click(() => {
+        window.location.href = "../menu";
+      });
+      $('#btn-products').click(() => {
+        window.location.href = "../products";
       });
       $('#btn-cashier').click(() => {
         window.location.href = "../cashier";
