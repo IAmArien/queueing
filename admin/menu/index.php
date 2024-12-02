@@ -80,7 +80,7 @@
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
         <button
-          id="btn-orders"
+          id="btn-menu"
           class="btn btn-success btn-sm
             fira-sans-medium 
             size-13 
@@ -92,7 +92,7 @@
           <i class="fa-solid fa-bars"></i><span style="padding-left: 16px">&nbsp;Menu Management</span>
         </button>
         <button
-          id="btn-orders"
+          id="btn-products"
           class="btn btn-outline-success btn-sm
             fira-sans-medium 
             size-13 
@@ -151,6 +151,7 @@
             <tr>
               <th class="fira-sans-medium">Menu (ID)</th>
               <th class="fira-sans-medium">Menu (Name)</th>
+              <th class="fira-sans-medium">Menu (Description)</th>
               <th class="fira-sans-medium"></th>
             </tr>
           </thead>
@@ -162,6 +163,7 @@
                 while ($row = $result->fetch_assoc()) {
                   $menu_id = $row['id'];
                   $menu_name = $row['menu_name'];
+                  $menu_description = $row['menu_description'];
 
                   echo '
                     <tr>
@@ -169,12 +171,16 @@
                       <td class="color-dark fira-sans-regular">
                         '.$menu_name.'
                       </td>
+                      <td class="color-dark fira-sans-regular">
+                        '.$menu_description.'
+                      </td>
                       <td>
                         <div class="dropdown">
                           <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                             ACTIONS
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#staticEditMenu">Edit Menu</a></li>
                             <li><a class="dropdown-item" href="../../actions/delete_menu.php?menu_id='.$menu_id.'">Delete Menu</a></li>
                           </ul>
                         </div>
@@ -215,6 +221,69 @@
               type="text"
               class="form-control fira-sans-regular"
               placeholder="Menu (Name)"
+              required
+            />
+            <div style="margin-top: 12px;"></div>
+            <input
+              name="menu_description"
+              type="text"
+              class="form-control fira-sans-regular"
+              placeholder="Menu (Description)"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-secondary fira-sans-medium">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success fira-sans-medium">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div
+    class="modal fade" 
+    id="staticEditMenu" 
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false" 
+    tabindex="-1" 
+    aria-labelledby="staticBackdropLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-md">
+      <form action="../../actions/update_menu.php" method="POST">
+        <input type="hidden" value="" name="menu_id" id="ed_input_menu_id" />
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Edit Menu</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p
+              class="fira-sans-regular color-dark"
+              style="margin-bottom: 15px;">
+              Please fill up all the fields to update this menu. (Name of the menu must not be duplicated to avoid confusions)
+            </p>
+            <input
+              name="menu_name"
+              type="text"
+              class="form-control fira-sans-regular"
+              placeholder="Menu (Name)"
+              required
+            />
+            <div style="margin-top: 12px;"></div>
+            <input
+              name="menu_description"
+              type="text"
+              class="form-control fira-sans-regular"
+              placeholder="Menu (Description)"
               required
             />
           </div>
@@ -259,6 +328,12 @@
       });
       $('#btn-orders').click(() => {
         window.location.href = "../orders";
+      });
+      $('#btn-products').click(() => {
+        window.location.href = "../products";
+      });
+      $('#btn-cashier').click(() => {
+        window.location.href = "../cashier";
       });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";

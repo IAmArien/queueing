@@ -80,6 +80,28 @@
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
         <button
+          id="btn-menu"
+          class="btn btn-outline-success btn-sm
+            fira-sans-medium 
+            size-13 
+            color-dark 
+            btn-menu 
+            btn-menu-selected"
+          type="button">
+          <i class="fa-solid fa-bars"></i><span style="padding-left: 16px">&nbsp;Menu Management</span>
+        </button>
+        <button
+          id="btn-products"
+          class="btn btn-outline-success btn-sm
+            fira-sans-medium 
+            size-13 
+            color-dark 
+            btn-menu 
+            btn-menu-selected"
+          type="button">
+          <i class="fa-solid fa-mug-hot"></i><span style="padding-left: 16px">&nbsp;Product Management</span>
+        </button>
+        <button
           id="btn-cashier"
           class="btn btn-success btn-sm
             fira-sans-medium 
@@ -305,6 +327,12 @@
       });
       $('#btn-for-payment').click(() => {
         window.location.href = "../for_payment";
+      });
+      $('#btn-menu').click(() => {
+        window.location.href = "../menu";
+      });
+      $('#btn-products').click(() => {
+        window.location.href = "../products";
       });
       $('#btn-orders').click(() => {
         window.location.href = "../orders";

@@ -80,7 +80,7 @@
           <i class="fa-solid fa-tags"></i><span style="padding-left: 16px">&nbsp;Orders</span>
         </button>
         <button
-          id="btn-orders"
+          id="btn-menu"
           class="btn btn-outline-success btn-sm
             fira-sans-medium 
             size-13 
@@ -91,7 +91,7 @@
           <i class="fa-solid fa-bars"></i><span style="padding-left: 16px">&nbsp;Menu Management</span>
         </button>
         <button
-          id="btn-orders"
+          id="btn-products"
           class="btn btn-success btn-sm
             fira-sans-medium 
             size-13 
@@ -318,6 +318,12 @@
       });
       $('#btn-orders').click(() => {
         window.location.href = "../orders";
+      });
+      $('#btn-menu').click(() => {
+        window.location.href = "../menu";
+      });
+      $('#btn-cashier').click(() => {
+        window.location.href = "../cashier";
       });
       $('#btn-logout').click(() => {
         window.location.href = "../../actions/logout.php";
