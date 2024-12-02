@@ -149,10 +149,11 @@
         <table id="data" class="table table-striped" style="width:100%">
           <thead>
             <tr>
+              <th class="fira-sans-medium">Row</th>
               <th class="fira-sans-medium">Product Name</th>
               <th class="fira-sans-medium">Menu</th>
-              <th class="fira-sans-medium">Price (Medio)</th>
-              <th class="fira-sans-medium">Price (Grande)</th>
+              <th class="fira-sans-medium">Price (MD 100ml)</th>
+              <th class="fira-sans-medium">Price (GD 200ml)</th>
               <th class="fira-sans-medium"></th>
             </tr>
           </thead>
@@ -161,6 +162,7 @@
               $fetch_query = "SELECT * FROM products ORDER BY id DESC";
               $result = $conn->query($fetch_query);
               if ($result->num_rows > 0) {
+                $row_count = 0;
                 while ($row = $result->fetch_assoc()) {
                   $product_id = $row['id'];
                   $menu_id = $row['menu_id'];
@@ -185,8 +187,11 @@
                     $price_grande = $price_row['price_grande'];
                   }
 
+                  $row_count += 1;
+
                   echo '
                     <tr>
+                      <td class="color-brown fira-sans-medium">'.$row_count.'</td>
                       <td class="color-brown fira-sans-medium">'.$product_name.'</td>
                       <td class="color-dark fira-sans-regular">
                         '.$menu_name.'
@@ -308,7 +313,7 @@
       $('#data').dataTable({
         'bLengthChange': false,
         'searching': false,
-        'order': [[0, 'desc']]
+        'order': [[0, 'asc']]
       });
       $('#btn-dashboard').click(() => {
         window.location.href = "../dashboard";
