@@ -180,7 +180,14 @@
                             ACTIONS
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#staticEditMenu">Edit Menu</a></li>
+                            <li>
+                              <a
+                                class="dropdown-item"
+                                style="cursor: pointer;"
+                                onclick="onEditMenu('.$menu_id.', '."'".$menu_name."'".', '."'".$menu_description."'".')">
+                                Edit Menu
+                              </a>
+                            </li>
                             <li><a class="dropdown-item" href="../../actions/delete_menu.php?menu_id='.$menu_id.'">Delete Menu</a></li>
                           </ul>
                         </div>
@@ -259,7 +266,7 @@
     aria-hidden="true">
     <div class="modal-dialog modal-md">
       <form action="../../actions/update_menu.php" method="POST">
-        <input type="hidden" value="" name="menu_id" id="ed_input_menu_id" />
+        <input type="hidden" value="" name="menu_id" id="ed_menu_id" />
         <div class="modal-content">
           <div class="modal-header">
             <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Edit Menu</h1>
@@ -272,6 +279,7 @@
               Please fill up all the fields to update this menu. (Name of the menu must not be duplicated to avoid confusions)
             </p>
             <input
+              id="ed_menu_name"
               name="menu_name"
               type="text"
               class="form-control fira-sans-regular"
@@ -280,6 +288,7 @@
             />
             <div style="margin-top: 12px;"></div>
             <input
+              id="ed_menu_description"
               name="menu_description"
               type="text"
               class="form-control fira-sans-regular"
@@ -313,6 +322,14 @@
   </script>
   <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+  <script type="text/javascript">
+    const onEditMenu = (menu_id, menu_name, menu_description) => {
+      $('#ed_menu_id').val(menu_id);
+      $('#ed_menu_name').val(menu_name);
+      $('#ed_menu_description').val(menu_description);
+      $('#staticEditMenu').modal('show');
+    }
+  </script>
   <script type="text/javascript">
     $(document).ready(() => {
       $('#data').dataTable({
