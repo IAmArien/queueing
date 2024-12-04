@@ -28,36 +28,47 @@
     <div class="div-classic-top-bar"></div>
     <div class="div-classic-side-bar">
       <div class="div-side-bar-content">
-        <div id="select-real-fruit-quenchers" class="div-menu-selection-item active">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Real Fruit Quenchers</h5>
-        </div>
-        <div id="select-classic-milk-tea" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Classic Milktea</h5>
-        </div>
-        <div id="select-premium-milk-tea" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Premium Milktea</h5>
-        </div>
-        <div id="select-tea-based-series" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Tea Based Series</h5>
-        </div>
-        <div id="select-yakult-series" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Yakult Series</h5>
-        </div>
-        <div id="select-lemonade-series" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Lemonade Series</h5>
-        </div>
-        <div id="select-classic-blends" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Classic Blends</h5>
-        </div>
-        <div id="select-prime-blends" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Prime Blends</h5>
-        </div>
-        <div id="select-java-frappe" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Java Frappe</h5>
-        </div>
-        <div id="select-cream-frappe" class="div-menu-selection-item">
-          <h5 class="fira-sans-medium h5-menu-selection-item-title">Cream Frappe</h5>
-        </div>
+        <?php
+          $fetch_query = "SELECT * FROM menu ORDER BY id ASC";
+          $result = $conn->query($fetch_query);
+          if ($result->num_rows > 0) {
+            $row_count = 1;
+            while ($row = $result->fetch_assoc()) {
+              $menu_id = $row['id'];
+              $menu_name = $row['menu_name'];
+              if (isset($_GET['menu_id'])) {
+                if ($_GET['menu_id'] == $menu_id) {
+                  echo '
+                    <div onclick="selectMenu('.$menu_id.')" class="div-menu-selection-item active">
+                      <h5 class="fira-sans-medium h5-menu-selection-item-title">'.$menu_name.'</h5>
+                    </div>
+                  ';
+                } else {
+                  echo '
+                    <div onclick="selectMenu('.$menu_id.')" class="div-menu-selection-item">
+                      <h5 class="fira-sans-medium h5-menu-selection-item-title">'.$menu_name.'</h5>
+                    </div>
+                  ';
+                }
+              } else {
+                if ($row_count == 1) {
+                  echo '
+                    <div onclick="selectMenu('.$menu_id.')" class="div-menu-selection-item active">
+                      <h5 class="fira-sans-medium h5-menu-selection-item-title">'.$menu_name.'</h5>
+                    </div>
+                  ';
+                } else {
+                  echo '
+                    <div onclick="selectMenu('.$menu_id.')" class="div-menu-selection-item">
+                      <h5 class="fira-sans-medium h5-menu-selection-item-title">'.$menu_name.'</h5>
+                    </div>
+                  ';
+                }
+              }
+              $row_count += 1;
+            }
+          }
+        ?>
       </div>
     </div>
     <div class="div-classic-container">
@@ -68,7 +79,34 @@
               <!-- Menu Content Header Title -->
               <div class="div-selected-menu-content-header">
                 <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Real Fruit Quenchers</h2>
+                  <?php
+                    if (isset($_GET['menu_id'])) {
+                      $menu_id = $_GET['menu_id'];
+                      $fetch_query = "SELECT * FROM menu WHERE id = ".$menu_id." LIMIT 1";
+                      $result = $conn->query($fetch_query);
+                      if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $menu_name = $row['menu_name'];
+                        echo '<h2 class="h3-selected-menu-title dancing-script-700">'.$menu_name.'</h2>';
+                      } else {
+                        $fetch_query = "SELECT * FROM menu ORDER BY id ASC LIMIT 1";
+                        $result = $conn->query($fetch_query);
+                        if ($result->num_rows > 0) {
+                          $row = $result->fetch_assoc();
+                          $menu_name = $row['menu_name'];
+                          echo '<h2 class="h3-selected-menu-title dancing-script-700">'.$menu_name.'</h2>';
+                        }
+                      }
+                    } else {
+                      $fetch_query = "SELECT * FROM menu ORDER BY id ASC LIMIT 1";
+                      $result = $conn->query($fetch_query);
+                      if ($result->num_rows > 0) {
+                        $row = $result->fetch_assoc();
+                        $menu_name = $row['menu_name'];
+                        echo '<h2 class="h3-selected-menu-title dancing-script-700">'.$menu_name.'</h2>';
+                      }
+                    }
+                  ?>
                 </div>
                 <div class="div-menu-item-sizes">
                   <div class="div-menu-item-size-content">
@@ -83,1005 +121,78 @@
               </div>
               <!-- Menu Content Header Title -->
               <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Mango Shake', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 60 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Mango Shake</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Melon Shake', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 60 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Melon Shake</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Buko Shake', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 60 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Buko Shake</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Guyabano Shake', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Guyabano Shake</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Mango Graham', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Mango Graham</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Mango Fruit', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Mango Fruiti</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Fruiti Buko', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Buko</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Melon', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Melon</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Banana', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Banana</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Avocado', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Avocado</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Guyabano', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Guyabano</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Cheesecake', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Cheesecake</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Strawberry', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Strawberry</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Fruiti Mixed Berries', prices: [{ size: 'Medio', price: 90 }, { size: 'Grande', price: 100 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Fruiti Mixed Berries</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱100</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="classic-milk-tea" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Classic Milktea</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Bobba', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Bobba</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Tarro', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Tarro</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Lychee', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Lychee</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Dark Chocco', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Dark Chocco</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Wintermelon', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Wintermelon</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Honeydew', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Honeydew</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Cookies & Cream', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 85 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Cookies & Cream</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="premium-milk-tea" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Premium Milktea</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Dark Choco Cookies', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Dark Choco Cookies</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry Cookies', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry Cookies</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Sawadeeka (Thai)', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Sawadeeka (Thai)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Konnichiwa (Okinawa)', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Konnichiwa (Okinawa)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Blueberry', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Blueberry</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Vanilla', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Vanilla</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱95</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Caramel', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Caramel</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱95</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Hazelnut', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Hazelnut</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱95</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Matcha', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 95 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Matcha</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱95</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Matcha (Cookies)', prices: [{ size: 'Medio', price: 85 }, { size: 'Grande', price: 100 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Matcha (Cookies)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱100</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items"  onclick="
-                  onAddToOrder({ item: 'Java Espresso', prices: [{ size: 'Medio', price: 85 }, { size: 'Grande', price: 100 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Java Espresso</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱85</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱100</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="tea-based-series" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Tea Based Series</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Lychee (Tea-based)', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Lychee (Tea-based)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Green Apple', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Green Apple</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Blueberry (Tea-based)', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Blueberry (Tea-based)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry (Tea-based)', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry (Tea-based)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Kiwi', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Kiwi</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Passion Fruit', prices: [{ size: 'Medio', price: 50 }, { size: 'Grande', price: 65 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Passion Fruit</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱50</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱65</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="yakult-series" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Yakult Series</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Lychee (Yakult)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 75 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Lychee (Yakult)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Green Apple (Yakult)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 75 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Green Apple (Yakult)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Blueberry (Yakult)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 75 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Blueberry (Yakult)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry (Yakult)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 75 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry (Yakult)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Kiwi (Yakult)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 75 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Kiwi (Yakult)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱75</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="lemonade-series" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Lemonade Series</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Classic Lemon', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Classic Lemon</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Kiwi (Lemonade)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Kiwi (Lemonade)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Green Apple (Lemonade)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Green Apple (Lemonade)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry (Lemonade)', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry (Lemonade)</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Orange Lemon', prices: [{ size: 'Medio', price: 60 }, { size: 'Grande', price: 70 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Orange Lemon</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱60</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Cucumber', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Cucumber</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Yakult', prices: [{ size: 'Medio', price: 80 }, { size: 'Grande', price: 90 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Yakult</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱80</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="classic-blends" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Classic Blends</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Espresso Shot', prices: [{ size: 'Medio', price: 70 }, { size: 'Grande', price: 90 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Espresso Shot</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱70</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱90</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Hot Americano', prices: [{ size: 'Medio', price: 105 }, { size: 'Grande', price: 120 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Hot Americano</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱105</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱120</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Capuccino', prices: [{ size: 'Medio', price: 105 }, { size: 'Grande', price: 120 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Capuccino</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱105</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱120</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Hot Mocha', prices: [{ size: 'Medio', price: 110 }, { size: 'Grande', price: 125 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Hot Mocha</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱110</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱125</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Hot Latte', prices: [{ size: 'Medio', price: 110 }, { size: 'Grande', price: 125 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Hot Latte</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱110</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱125</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'White Choco Mocha', prices: [{ size: 'Medio', price: 110 }, { size: 'Grande', price: 125 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">White Choco Mocha</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱110</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱125</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="prime-blends" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Prime Blends</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Matcha Latte', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Matcha Latte</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Caramel Macchiato', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Caramel Macchiato</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Vanilla', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Vanilla</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Vanilla Salted Caramel', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Vanilla Salted Caramel</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Mochanut', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Mochanut</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Salted Caramel', prices: [{ size: 'Medio', price: 115 }, { size: 'Grande', price: 130 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Salted Caramel</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱115</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="java-frappe" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Java Frappe</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Matcha Frappe', prices: [{ size: 'Medio', price: ₱130 }, { size: 'Grande', price: ₱150 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Matcha Frappe</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱150</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Choco Frappe', prices: [{ size: 'Medio', price: 135 }, { size: 'Grande', price: 155 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Choco Frappe</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱135</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱155</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Mochanut Frappe', prices: [{ size: 'Medio', price: 135 }, { size: 'Grande', price: 155 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Mochanut Frappe</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱135</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱155</h5>
-                </div>
-              </div>
-              <!-- Menu Content Items (Item and Prices) -->
-            </div>
-          </div>
-          <div id="cream-frappe" style="display: none;">
-            <div class="div-selected-menu-content">
-              <!-- Menu Content Header Title -->
-              <div class="div-selected-menu-content-header">
-                <div class="div-selected-menu-content-title">
-                  <h2 class="h3-selected-menu-title dancing-script-700">Cream Frappe</h2>
-                </div>
-                <div class="div-menu-item-sizes">
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">MEDIO</h5>
-                    <p class="fira-sans-regular color-brown">100ml</p>
-                  </div>
-                  <div class="div-menu-item-size-content">
-                    <h5 class="fira-sans-medium color-brown">GRANDE</h5>
-                    <p class="fira-sans-regular color-brown">200ml</p>
-                  </div>
-                </div>
-              </div>
-              <!-- Menu Content Header Title -->
-              <!-- Menu Content Items (Item and Prices) -->
-              <div class="div-selected-menu-content-items">
-                <div class="div-menu-item-title" onclick="
-                  onAddToOrder({ item: 'Lychee Cream', prices: [{ size: 'Medio', price: 125 }, { size: 'Grande', price: 145 }] })">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Lychee Cream</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱125</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱145</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Blueberry Cream', prices: [{ size: 'Medio', price: 125 }, { size: 'Grande', price: 145 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Blueberry Cream</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱125</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱145</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Strawberry Cream', prices: [{ size: 'Medio', price: 130 }, { size: 'Grande', price: 150 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Strawberry Cream</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱150</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Dark ChoCookies', prices: [{ size: 'Medio', price: 130 }, { size: 'Grande', price: 150 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Dark ChoCookies</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱150</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'White ChoCookies', prices: [{ size: 'Medio', price: 130 }, { size: 'Grande', price: 150 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">White ChoCookies</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱150</h5>
-                </div>
-              </div>
-              <div class="div-selected-menu-content-items" onclick="
-                  onAddToOrder({ item: 'Matcha Cream', prices: [{ size: 'Medio', price: 130 }, { size: 'Grande', price: 150 }] })">
-                <div class="div-menu-item-title">
-                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">Matcha Cream</h5>
-                </div>
-                <div class="div-menu-item-prices">
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱130</h5>
-                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱150</h5>
-                </div>
-              </div>
+              <?php
+                if (isset($_GET['menu_id'])) {
+                  $menu_id = $_GET['menu_id'];
+                  $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
+                  $result = $conn->query($fetch_query);
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      $product_id = $row['id'];
+                      $product_name = $row['product_name'];
+
+                      $fetch_query = "SELECT * FROM products_price WHERE product_id = ".$product_id." LIMIT 1";
+                      $price_result = $conn->query($fetch_query);
+                      if ($price_result->num_rows > 0) {
+                        $price_row = $price_result->fetch_assoc();
+                        $price_medio = $price_row['price_medio'];
+                        $price_grande = $price_row['price_grande'];
+
+                        echo '
+                          <div class="div-selected-menu-content-items">
+                            <div class="div-menu-item-title" onclick="
+                              onAddToOrder('.$product_id.')">
+                              <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
+                              <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.'</h5>
+                            </div>
+                            <div class="div-menu-item-prices">
+                              <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
+                              <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
+                            </div>
+                          </div>
+                        ';
+                      }
+                    }
+                  }
+                } else {
+                  $fetch_query = "SELECT * FROM menu ORDER BY id ASC LIMIT 1";
+                  $result = $conn->query($fetch_query);
+                  if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $menu_id = $row['id'];
+                    $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                        $product_id = $row['id'];
+                        $product_name = $row['product_name'];
+
+                        $fetch_query = "SELECT * FROM products_price WHERE product_id = ".$product_id." LIMIT 1";
+                        $price_result = $conn->query($fetch_query);
+                        if ($price_result->num_rows > 0) {
+                          $price_row = $price_result->fetch_assoc();
+                          $price_medio = $price_row['price_medio'];
+                          $price_grande = $price_row['price_grande'];
+
+                          echo '
+                            <div class="div-selected-menu-content-items">
+                              <div class="div-menu-item-title" onclick="
+                                onAddToOrder('.$product_id.')">
+                                <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
+                                <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.'</h5>
+                              </div>
+                              <div class="div-menu-item-prices">
+                                <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
+                                <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
+                              </div>
+                            </div>
+                          ';
+                        }
+                      }
+                    }
+                  }
+                }
+              ?>
               <!-- Menu Content Items (Item and Prices) -->
             </div>
           </div>
@@ -1090,7 +201,22 @@
     </div>
     <div class="div-footer-order-summary">
       <div class="div-order-summary">
-        <h6 id="h6-order-list-summary" class="color-dark fira-sans-regular" style="margin-bottom: 0px;">No items in the list</h6>
+        <?php
+           if (isset($_SESSION['cart_products'])) {
+             $cartItemsTotal = count($_SESSION['cart_products']);
+              if ($cartItemsTotal == 0) {
+                echo '<h6 id="h6-order-list-summary" class="color-dark fira-sans-regular" style="margin-bottom: 0px;">No items in the list</h6>';
+              } else {
+                if ($cartItemsTotal == 1) {
+                  echo '<h6 id="h6-order-list-summary" class="color-dark fira-sans-regular" style="margin-bottom: 0px;">1 item in the list</h6>';
+                } else {
+                  echo '<h6 id="h6-order-list-summary" class="color-dark fira-sans-regular" style="margin-bottom: 0px;">'.$cartItemsTotal.' item in the list</h6>';
+                }
+              }
+            } else {
+              echo '<h6 id="h6-order-list-summary" class="color-dark fira-sans-regular" style="margin-bottom: 0px;">No items in the list</h6>';
+            }
+        ?>
         <button
           data-bs-toggle="modal"
           data-bs-target="#staticViewOrders"
@@ -1134,7 +260,7 @@
       aria-labelledby="staticBackdropLabel" 
       aria-hidden="true">
       <div class="modal-dialog modal-md modal-dialog-centered">
-        <form action="../actions/delete_user.php" method="POST">
+        <form action="./actions/delete_order.php" method="POST">
           <input id="delete-ue" type="hidden" name="email" />
           <div class="modal-content">
             <div class="modal-header">
@@ -1149,9 +275,14 @@
               </p>
             </div>
             <div class="modal-footer">
-              <button
+              <!-- <button
                 id="btn-cancel-orders"
                 type="button"
+                class="btn btn-outline-secondary btn-choose-order fira-sans-medium bg-color-brown color-white">
+                Cancel
+              </button> -->
+              <button
+                type="submit"
                 class="btn btn-outline-secondary btn-choose-order fira-sans-medium bg-color-brown color-white">
                 Cancel
               </button>
@@ -1170,93 +301,103 @@
       aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-header">
-            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Choose Size</h1>
-            <button id="btn-close-ato" type="button" class="btn-close" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div class="div-choose-size-selection">
-              <div id="div-medio-size" class="div-choose-size-selection-item active">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  width="150"
-                  zoomAndPan="magnify"
-                  viewBox="0 0 375 374.999991"
-                  height="150"
-                  preserveAspectRatio="xMidYMid meet"
-                  version="1.0">
-                  <defs>
-                    <clipPath id="2dc0e9b9d5">
-                      <path d="M 88 37.5 L 287 37.5 L 287 325 L 88 325 Z M 88 37.5 " clip-rule="nonzero"/>
-                    </clipPath>
-                    <clipPath id="14a455b86b">
-                      <path d="M 187 37.5 L 287 37.5 L 287 325 L 187 325 Z M 187 37.5 " clip-rule="nonzero"/>
-                    </clipPath>
-                  </defs>
-                  <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
-                  <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
-                  <path fill="#ffffff" d="M 252.285156 315.796875 L 256.484375 243.601562 L 263.457031 124.621094 L 267.574219 81.773438 L 107.632812 81.773438 L 111.75 124.621094 L 118.722656 243.601562 L 122.921875 315.796875 Z M 252.285156 315.796875 " fill-opacity="1" fill-rule="nonzero"/><path fill="#8e5025" d="M 112 132.503906 L 118.46875 242.679688 L 256.738281 242.679688 L 263.203125 132.503906 Z M 112 132.503906 " fill-opacity="1" fill-rule="nonzero"/><path fill="#232322" d="M 120.316406 46.21875 C 119.898438 46.21875 119.644531 46.554688 119.644531 46.890625 L 119.644531 56.28125 L 255.558594 56.28125 L 255.558594 46.976562 C 255.558594 46.554688 255.222656 46.304688 254.886719 46.304688 L 120.316406 46.304688 Z M 120.316406 46.21875 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#2dc0e9b9d5)"><path fill="#000000" d="M 286.304688 71.878906 L 280.59375 60.222656 C 279.417969 57.875 276.980469 56.367188 274.378906 56.367188 L 264.296875 56.367188 L 264.296875 46.976562 C 264.296875 41.777344 260.011719 37.5 254.804688 37.5 L 120.316406 37.5 C 115.109375 37.5 110.824219 41.777344 110.824219 46.976562 L 110.824219 56.367188 L 100.746094 56.367188 C 98.140625 56.367188 95.703125 57.875 94.527344 60.222656 L 88.898438 71.878906 C 87.890625 74.058594 87.976562 76.492188 89.238281 78.503906 C 90.496094 80.515625 92.679688 81.773438 95.117188 81.773438 L 98.8125 81.773438 L 114.101562 316.554688 C 114.351562 321.082031 118.132812 324.601562 122.585938 324.601562 L 252.367188 324.601562 C 256.90625 324.601562 260.601562 321.082031 260.851562 316.554688 L 276.140625 81.773438 L 279.835938 81.773438 C 282.273438 81.773438 284.457031 80.597656 285.71875 78.503906 C 287.144531 76.574219 287.3125 74.058594 286.304688 71.878906 Z M 119.644531 46.976562 C 119.644531 46.554688 119.980469 46.304688 120.316406 46.304688 L 254.804688 46.304688 C 255.222656 46.304688 255.476562 46.640625 255.476562 46.976562 L 255.476562 56.367188 L 119.644531 56.367188 Z M 252.285156 315.796875 L 122.921875 315.796875 L 119.140625 251.402344 L 256.066406 251.402344 Z M 118.636719 242.679688 L 112.253906 132.503906 L 263.035156 132.503906 L 256.652344 242.679688 Z M 263.539062 123.78125 L 111.664062 123.78125 L 107.550781 81.855469 L 267.574219 81.855469 Z M 98.140625 73.050781 L 102.003906 65.085938 L 273.199219 65.085938 L 277.066406 73.050781 Z M 98.140625 73.050781 " fill-opacity="1" fill-rule="nonzero"/></g><path fill="#232322" d="M 102.003906 65.085938 L 98.140625 73.050781 L 277.066406 73.050781 L 273.199219 65.085938 Z M 102.003906 65.085938 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#14a455b86b)"><path fill="#020202" d="M 285.886719 78.585938 C 284.625 80.597656 282.441406 81.855469 280.003906 81.855469 L 276.308594 81.855469 L 261.019531 316.636719 C 260.769531 321.164062 256.988281 324.6875 252.535156 324.6875 L 187.601562 324.6875 L 187.601562 37.5 L 254.886719 37.5 C 260.097656 37.5 264.378906 41.777344 264.378906 46.976562 L 264.378906 56.367188 L 274.460938 56.367188 C 277.066406 56.367188 279.5 57.875 280.675781 60.222656 L 286.390625 71.878906 C 287.3125 74.058594 287.144531 76.574219 285.886719 78.585938 Z M 285.886719 78.585938 " fill-opacity="0.15" fill-rule="nonzero"/></g></svg>
-                <h3 class="fira-sans-medium color-brown">MEDIO</h3>
-                <p class="fira-sans-regular color-brown">100ml</p>
+          <form action="./actions/add_order.php" method="POST">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Choose Size</h1>
+              <button id="btn-close-ato" type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="div-choose-size-selection">
+                <div id="div-medio-size" class="div-choose-size-selection-item active">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="150"
+                    zoomAndPan="magnify"
+                    viewBox="0 0 375 374.999991"
+                    height="150"
+                    preserveAspectRatio="xMidYMid meet"
+                    version="1.0">
+                    <defs>
+                      <clipPath id="2dc0e9b9d5">
+                        <path d="M 88 37.5 L 287 37.5 L 287 325 L 88 325 Z M 88 37.5 " clip-rule="nonzero"/>
+                      </clipPath>
+                      <clipPath id="14a455b86b">
+                        <path d="M 187 37.5 L 287 37.5 L 287 325 L 187 325 Z M 187 37.5 " clip-rule="nonzero"/>
+                      </clipPath>
+                    </defs>
+                    <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
+                    <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
+                    <path fill="#ffffff" d="M 252.285156 315.796875 L 256.484375 243.601562 L 263.457031 124.621094 L 267.574219 81.773438 L 107.632812 81.773438 L 111.75 124.621094 L 118.722656 243.601562 L 122.921875 315.796875 Z M 252.285156 315.796875 " fill-opacity="1" fill-rule="nonzero"/><path fill="#8e5025" d="M 112 132.503906 L 118.46875 242.679688 L 256.738281 242.679688 L 263.203125 132.503906 Z M 112 132.503906 " fill-opacity="1" fill-rule="nonzero"/><path fill="#232322" d="M 120.316406 46.21875 C 119.898438 46.21875 119.644531 46.554688 119.644531 46.890625 L 119.644531 56.28125 L 255.558594 56.28125 L 255.558594 46.976562 C 255.558594 46.554688 255.222656 46.304688 254.886719 46.304688 L 120.316406 46.304688 Z M 120.316406 46.21875 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#2dc0e9b9d5)"><path fill="#000000" d="M 286.304688 71.878906 L 280.59375 60.222656 C 279.417969 57.875 276.980469 56.367188 274.378906 56.367188 L 264.296875 56.367188 L 264.296875 46.976562 C 264.296875 41.777344 260.011719 37.5 254.804688 37.5 L 120.316406 37.5 C 115.109375 37.5 110.824219 41.777344 110.824219 46.976562 L 110.824219 56.367188 L 100.746094 56.367188 C 98.140625 56.367188 95.703125 57.875 94.527344 60.222656 L 88.898438 71.878906 C 87.890625 74.058594 87.976562 76.492188 89.238281 78.503906 C 90.496094 80.515625 92.679688 81.773438 95.117188 81.773438 L 98.8125 81.773438 L 114.101562 316.554688 C 114.351562 321.082031 118.132812 324.601562 122.585938 324.601562 L 252.367188 324.601562 C 256.90625 324.601562 260.601562 321.082031 260.851562 316.554688 L 276.140625 81.773438 L 279.835938 81.773438 C 282.273438 81.773438 284.457031 80.597656 285.71875 78.503906 C 287.144531 76.574219 287.3125 74.058594 286.304688 71.878906 Z M 119.644531 46.976562 C 119.644531 46.554688 119.980469 46.304688 120.316406 46.304688 L 254.804688 46.304688 C 255.222656 46.304688 255.476562 46.640625 255.476562 46.976562 L 255.476562 56.367188 L 119.644531 56.367188 Z M 252.285156 315.796875 L 122.921875 315.796875 L 119.140625 251.402344 L 256.066406 251.402344 Z M 118.636719 242.679688 L 112.253906 132.503906 L 263.035156 132.503906 L 256.652344 242.679688 Z M 263.539062 123.78125 L 111.664062 123.78125 L 107.550781 81.855469 L 267.574219 81.855469 Z M 98.140625 73.050781 L 102.003906 65.085938 L 273.199219 65.085938 L 277.066406 73.050781 Z M 98.140625 73.050781 " fill-opacity="1" fill-rule="nonzero"/></g><path fill="#232322" d="M 102.003906 65.085938 L 98.140625 73.050781 L 277.066406 73.050781 L 273.199219 65.085938 Z M 102.003906 65.085938 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#14a455b86b)"><path fill="#020202" d="M 285.886719 78.585938 C 284.625 80.597656 282.441406 81.855469 280.003906 81.855469 L 276.308594 81.855469 L 261.019531 316.636719 C 260.769531 321.164062 256.988281 324.6875 252.535156 324.6875 L 187.601562 324.6875 L 187.601562 37.5 L 254.886719 37.5 C 260.097656 37.5 264.378906 41.777344 264.378906 46.976562 L 264.378906 56.367188 L 274.460938 56.367188 C 277.066406 56.367188 279.5 57.875 280.675781 60.222656 L 286.390625 71.878906 C 287.3125 74.058594 287.144531 76.574219 285.886719 78.585938 Z M 285.886719 78.585938 " fill-opacity="0.15" fill-rule="nonzero"/></g></svg>
+                  <h3 class="fira-sans-medium color-brown">MEDIO</h3>
+                  <p class="fira-sans-regular color-brown">100ml</p>
+                </div>
+                <div id="div-grande-size" class="div-choose-size-selection-item">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                    width="150"
+                    zoomAndPan="magnify"
+                    viewBox="0 0 375 374.999991"
+                    height="150"
+                    preserveAspectRatio="xMidYMid meet"
+                    version="1.0">
+                    <defs>
+                      <clipPath id="888426bcd2">
+                        <path d="M 97 37.5 L 277.699219 37.5 L 277.699219 325 L 97 325 Z M 97 37.5 " clip-rule="nonzero"/>
+                      </clipPath>
+                      <clipPath id="e53bdfd240">
+                        <path d="M 187 37.5 L 277.699219 37.5 L 277.699219 326 L 187 326 Z M 187 37.5 " clip-rule="nonzero"/>
+                      </clipPath>
+                    </defs>
+                    <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
+                    <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
+                    <path fill="#ffffff" d="M 245.960938 317.023438 L 249.703125 251.324219 L 256.050781 143.234375 L 259.796875 77.941406 L 114.773438 77.941406 L 118.515625 143.234375 L 124.863281 251.324219 L 128.6875 317.023438 Z M 245.960938 317.023438 " fill-opacity="1" fill-rule="nonzero"/><path fill="#8e5025" d="M 118.761719 147.390625 L 124.621094 247.574219 L 249.949219 247.574219 L 255.808594 147.390625 Z M 118.761719 147.390625 " fill-opacity="1" fill-rule="nonzero"/><path fill="#232322" d="M 126.328125 45.664062 C 126.003906 45.664062 125.679688 45.90625 125.679688 46.3125 L 125.679688 54.792969 L 248.890625 54.792969 L 248.890625 46.234375 C 248.890625 45.90625 248.648438 45.582031 248.238281 45.582031 L 126.328125 45.582031 Z M 126.328125 45.664062 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#888426bcd2)"><path fill="#000000" d="M 276.722656 68.976562 L 271.597656 58.378906 C 270.539062 56.257812 268.339844 54.875 265.980469 54.875 L 256.867188 54.875 L 256.867188 46.234375 C 256.867188 41.503906 253.042969 37.671875 248.320312 37.671875 L 126.328125 37.671875 C 121.609375 37.671875 117.785156 41.503906 117.785156 46.234375 L 117.785156 54.792969 L 108.667969 54.792969 C 106.308594 54.792969 104.113281 56.175781 103.054688 58.296875 L 97.925781 68.894531 C 96.949219 70.851562 97.113281 73.132812 98.253906 74.925781 C 99.390625 76.800781 101.34375 77.859375 103.542969 77.859375 L 106.878906 77.859375 L 107.367188 86.828125 L 116.96875 251.730469 L 120.796875 317.675781 C 121.039062 321.75 124.457031 324.929688 128.527344 324.929688 L 246.207031 324.929688 C 250.273438 324.929688 253.691406 321.75 253.9375 317.675781 L 257.761719 251.730469 L 264.027344 143.5625 L 267.851562 77.859375 L 271.191406 77.859375 C 273.386719 77.859375 275.339844 76.800781 276.480469 74.925781 C 277.539062 73.214844 277.699219 70.929688 276.722656 68.976562 Z M 125.679688 46.234375 C 125.679688 45.90625 126.003906 45.582031 126.328125 45.582031 L 248.238281 45.582031 C 248.566406 45.582031 248.890625 45.824219 248.890625 46.234375 L 248.890625 54.792969 L 125.679688 54.792969 Z M 245.960938 317.023438 L 128.6875 317.023438 L 125.109375 255.5625 L 249.542969 255.5625 Z M 249.949219 247.574219 L 124.621094 247.574219 L 118.761719 147.390625 L 255.726562 147.390625 Z M 256.214844 139.484375 L 118.355469 139.484375 L 114.773438 78.023438 L 259.796875 78.023438 Z M 106.144531 70.035156 L 109.644531 62.78125 L 264.839844 62.78125 L 268.339844 70.035156 Z M 106.144531 70.035156 " fill-opacity="1" fill-rule="nonzero"/></g><path fill="#232322" d="M 109.644531 62.78125 L 106.144531 70.035156 L 268.421875 70.035156 L 264.921875 62.78125 Z M 109.644531 62.78125 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#e53bdfd240)"><path fill="#020202" d="M 276.398438 75.007812 C 275.257812 76.882812 273.304688 77.941406 271.109375 77.941406 L 267.769531 77.941406 L 263.945312 143.640625 L 257.679688 251.8125 L 253.855469 317.757812 C 253.609375 321.832031 250.191406 325.011719 246.125 325.011719 L 187.285156 325.011719 L 187.285156 37.671875 L 248.238281 37.671875 C 252.960938 37.671875 256.785156 41.503906 256.785156 46.234375 L 256.785156 54.792969 L 265.898438 54.792969 C 268.257812 54.792969 270.457031 56.175781 271.515625 58.296875 L 276.640625 68.894531 C 277.699219 70.929688 277.539062 73.214844 276.398438 75.007812 Z M 276.398438 75.007812 " fill-opacity="0.15" fill-rule="nonzero"/></g></svg>
+                  <h3 class="fira-sans-medium color-brown">GRANDE</h3>
+                  <p class="fira-sans-regular color-brown">200ml</p>
+                </div>
               </div>
-              <div id="div-grande-size" class="div-choose-size-selection-item">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  width="150"
-                  zoomAndPan="magnify"
-                  viewBox="0 0 375 374.999991"
-                  height="150"
-                  preserveAspectRatio="xMidYMid meet"
-                  version="1.0">
-                  <defs>
-                    <clipPath id="888426bcd2">
-                      <path d="M 97 37.5 L 277.699219 37.5 L 277.699219 325 L 97 325 Z M 97 37.5 " clip-rule="nonzero"/>
-                    </clipPath>
-                    <clipPath id="e53bdfd240">
-                      <path d="M 187 37.5 L 277.699219 37.5 L 277.699219 326 L 187 326 Z M 187 37.5 " clip-rule="nonzero"/>
-                    </clipPath>
-                  </defs>
-                  <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
-                  <rect x="-37.5" width="450" fill="#ffffff" y="-37.499999" height="449.999989" fill-opacity="1"/>
-                  <path fill="#ffffff" d="M 245.960938 317.023438 L 249.703125 251.324219 L 256.050781 143.234375 L 259.796875 77.941406 L 114.773438 77.941406 L 118.515625 143.234375 L 124.863281 251.324219 L 128.6875 317.023438 Z M 245.960938 317.023438 " fill-opacity="1" fill-rule="nonzero"/><path fill="#8e5025" d="M 118.761719 147.390625 L 124.621094 247.574219 L 249.949219 247.574219 L 255.808594 147.390625 Z M 118.761719 147.390625 " fill-opacity="1" fill-rule="nonzero"/><path fill="#232322" d="M 126.328125 45.664062 C 126.003906 45.664062 125.679688 45.90625 125.679688 46.3125 L 125.679688 54.792969 L 248.890625 54.792969 L 248.890625 46.234375 C 248.890625 45.90625 248.648438 45.582031 248.238281 45.582031 L 126.328125 45.582031 Z M 126.328125 45.664062 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#888426bcd2)"><path fill="#000000" d="M 276.722656 68.976562 L 271.597656 58.378906 C 270.539062 56.257812 268.339844 54.875 265.980469 54.875 L 256.867188 54.875 L 256.867188 46.234375 C 256.867188 41.503906 253.042969 37.671875 248.320312 37.671875 L 126.328125 37.671875 C 121.609375 37.671875 117.785156 41.503906 117.785156 46.234375 L 117.785156 54.792969 L 108.667969 54.792969 C 106.308594 54.792969 104.113281 56.175781 103.054688 58.296875 L 97.925781 68.894531 C 96.949219 70.851562 97.113281 73.132812 98.253906 74.925781 C 99.390625 76.800781 101.34375 77.859375 103.542969 77.859375 L 106.878906 77.859375 L 107.367188 86.828125 L 116.96875 251.730469 L 120.796875 317.675781 C 121.039062 321.75 124.457031 324.929688 128.527344 324.929688 L 246.207031 324.929688 C 250.273438 324.929688 253.691406 321.75 253.9375 317.675781 L 257.761719 251.730469 L 264.027344 143.5625 L 267.851562 77.859375 L 271.191406 77.859375 C 273.386719 77.859375 275.339844 76.800781 276.480469 74.925781 C 277.539062 73.214844 277.699219 70.929688 276.722656 68.976562 Z M 125.679688 46.234375 C 125.679688 45.90625 126.003906 45.582031 126.328125 45.582031 L 248.238281 45.582031 C 248.566406 45.582031 248.890625 45.824219 248.890625 46.234375 L 248.890625 54.792969 L 125.679688 54.792969 Z M 245.960938 317.023438 L 128.6875 317.023438 L 125.109375 255.5625 L 249.542969 255.5625 Z M 249.949219 247.574219 L 124.621094 247.574219 L 118.761719 147.390625 L 255.726562 147.390625 Z M 256.214844 139.484375 L 118.355469 139.484375 L 114.773438 78.023438 L 259.796875 78.023438 Z M 106.144531 70.035156 L 109.644531 62.78125 L 264.839844 62.78125 L 268.339844 70.035156 Z M 106.144531 70.035156 " fill-opacity="1" fill-rule="nonzero"/></g><path fill="#232322" d="M 109.644531 62.78125 L 106.144531 70.035156 L 268.421875 70.035156 L 264.921875 62.78125 Z M 109.644531 62.78125 " fill-opacity="1" fill-rule="nonzero"/><g clip-path="url(#e53bdfd240)"><path fill="#020202" d="M 276.398438 75.007812 C 275.257812 76.882812 273.304688 77.941406 271.109375 77.941406 L 267.769531 77.941406 L 263.945312 143.640625 L 257.679688 251.8125 L 253.855469 317.757812 C 253.609375 321.832031 250.191406 325.011719 246.125 325.011719 L 187.285156 325.011719 L 187.285156 37.671875 L 248.238281 37.671875 C 252.960938 37.671875 256.785156 41.503906 256.785156 46.234375 L 256.785156 54.792969 L 265.898438 54.792969 C 268.257812 54.792969 270.457031 56.175781 271.515625 58.296875 L 276.640625 68.894531 C 277.699219 70.929688 277.539062 73.214844 276.398438 75.007812 Z M 276.398438 75.007812 " fill-opacity="0.15" fill-rule="nonzero"/></g></svg>
-                <h3 class="fira-sans-medium color-brown">GRANDE</h3>
-                <p class="fira-sans-regular color-brown">200ml</p>
+              <h3 class="fira-sans-semibold size-12" style="margin-top: 12px;">Quantity:</h3>
+              <div class="div-choose-size-quantity">
+                <button id="btn-quantity-add" type="button" class="btn btn-outline-success btn-choose-size-quantity">
+                  <i class="fa-solid fa-circle-plus"></i>
+                </button>
+                <input type="hidden" name="product_id" id="input-product-id" required />
+                <input type="hidden" name="size_value" id="input-size-value" required />
+                <input
+                  id="input-size-quantity"
+                  name="size_quantity"
+                  type="number"
+                  placeholder="eg. (1)"
+                  value="1"
+                  readonly
+                  class="form-control input-choose-size-quantity"
+                />
+                <button id="btn-quantity-minus" type="button" class="btn btn-outline-secondary btn-choose-size-quantity">
+                  <i class="fa-solid fa-circle-minus"></i>
+                </button>
               </div>
             </div>
-            <h3 class="fira-sans-semibold size-12" style="margin-top: 12px;">Quantity:</h3>
-            <div class="div-choose-size-quantity">
-              <button id="btn-quantity-add" type="button" class="btn btn-outline-success btn-choose-size-quantity">
-                <i class="fa-solid fa-circle-plus"></i>
+            <div class="modal-footer">
+              <button
+                id="btn-cancel-size"
+                type="button"
+                class="btn btn-outline-secondary btn-choose-order fira-sans-medium color-dark">
+                Cancel
               </button>
-              <input
-                id="input-size-quantity"
-                type="number"
-                placeholder="eg. (1)"
-                value="1"
-                readonly
-                class="form-control input-choose-size-quantity"
-              />
-              <button id="btn-quantity-minus" type="button" class="btn btn-outline-secondary btn-choose-size-quantity">
-                <i class="fa-solid fa-circle-minus"></i>
+              <!-- <button
+                id="btn-choose-size"
+                type="button"
+                class="btn btn-outline-secondary btn-choose-order fira-sans-medium bg-color-brown color-white">
+                Choose
+              </button> -->
+              <button
+                type="submit"
+                class="btn btn-outline-secondary btn-choose-order fira-sans-medium bg-color-brown color-white">
+                Choose
               </button>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              id="btn-cancel-size"
-              type="button"
-              class="btn btn-outline-secondary btn-choose-order fira-sans-medium color-dark">
-              Cancel
-            </button>
-            <button
-              id="btn-choose-size"
-              type="button"
-              class="btn btn-outline-secondary btn-choose-order fira-sans-medium bg-color-brown color-white">
-              Choose
-            </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -1275,12 +416,48 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <p
-              id="p-no-orders-yet"
-              class="fira-sans-regular color-dark"
-              style="text-align: center; padding: 20px; margin-bottom: 0px;">
-              No Orders Yet.
-            </p>
+            <?php
+              if (isset($_SESSION['cart_products'])) {
+                if (count($_SESSION['cart_products']) == 0) {
+                  echo '
+                    <p
+                      id="p-no-orders-yet"
+                      class="fira-sans-regular color-dark"
+                      style="text-align: center; padding: 20px; margin-bottom: 0px;">
+                      No Orders Yet.
+                    </p>
+                  ';
+                } else {
+                  foreach ($_SESSION['cart_products'] as $cart_item) {
+                    echo '
+                      <div class="div-selected-menu-content-items">
+                        <div class="div-menu-item-title"
+                          onclick="onRemoveToOrder('.$cart_item['product_id'].')">
+                          <i class="fa-solid fa-circle-xmark"></i>&nbsp;&nbsp;&nbsp;
+                          <h5 class="h5-menu-item-title fira-sans-medium color-dark">
+                            ('.$cart_item['quantity'].') '.$cart_item['item'].'
+                          </h5>
+                        </div>
+                        <div class="div-menu-item-prices" style="width: 150px;">
+                          <h5 class="h5-menu-item-prices fira-sans-medium color-brown">
+                            ₱'.$cart_item['price'].' ('.$cart_item['size'].')
+                          </h5>
+                        </div>
+                      </div>
+                    ';
+                  }
+                }
+              } else {
+                echo '
+                  <p
+                    id="p-no-orders-yet"
+                    class="fira-sans-regular color-dark"
+                    style="text-align: center; padding: 20px; margin-bottom: 0px;">
+                    No Orders Yet.
+                  </p>
+                ';
+              }
+            ?>
             <div id="div-orders"></div>
           </div>
           <div class="modal-footer">
@@ -1288,10 +465,24 @@
               id="h5-total-prices"
               class="h5-menu-item-prices fira-sans-medium color-brown"
               style="text-align: left; align-self: center;">
-              Total: ₱0.00
+              <?php
+                $totalPrice = 0.00;
+                if (isset($_SESSION['cart_products'])) {
+                  if (count($_SESSION['cart_products']) == 0) {
+                    echo 'Total: ₱0.00';
+                  } else {
+                    foreach ($_SESSION['cart_products'] as $cart_item) {
+                      $totalPrice += (floatval($cart_item['price']) * intval($cart_item['quantity']));
+                    }
+                    echo 'Total: ₱'.$totalPrice;
+                  }
+                } else {
+                  echo 'Total: ₱0.00';
+                }
+              ?>
             </h5>
             <button
-              disabled="disabled"
+              <?php if ($totalPrice == 0.00) echo 'disabled="disabled"'; ?>
               data-bs-toggle="modal"
               data-bs-target="#staticCheckout"
               id="btn-checkout"
@@ -1445,5 +636,10 @@
         toastBootstrap.show()
       });
     }
+  </script>
+  <script>
+    const selectMenu = (menu_id) => {
+      window.location.href = "./?menu_id=" + menu_id;
+    };
   </script>
 </html>

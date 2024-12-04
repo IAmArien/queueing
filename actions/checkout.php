@@ -14,6 +14,13 @@
     ) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insert_query);
     $order_number = strval(rand());
+
+    if (isset($_SESSION['cart_products'])) {
+      if (count($_SESSION['cart_products']) >= 1) {
+        $queue_orders = json_encode($_SESSION['cart_products']);
+      }
+    }
+
     $order_products = $queue_orders;
     $order_type = $queue_orders_type;
     $order_date = date("Y/m/d");
@@ -42,6 +49,7 @@
         $_SESSION['checkout.order_date'] = $order_date;
         $_SESSION['checkout.order_time'] = $order_time;
         $_SESSION['checkout.order_status'] = $order_status;
+        unset($_SESSION['cart_products']);
         header('Location: ../for_payment');
       } else {
         unset($_SESSION['checkout.order_id']);
@@ -51,6 +59,7 @@
         unset($_SESSION['checkout.order_date']);
         unset($_SESSION['checkout.order_time']);
         unset($_SESSION['checkout.order_status']);
+        unset($_SESSION['cart_products']);
         header('Location: ../');
       }
     } else {
@@ -61,6 +70,7 @@
       unset($_SESSION['checkout.order_date']);
       unset($_SESSION['checkout.order_time']);
       unset($_SESSION['checkout.order_status']);
+      unset($_SESSION['cart_products']);
       header('Location: ../');
     }
   }

@@ -208,6 +208,7 @@
                             ACTIONS
                           </button>
                           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li><a class="dropdown-item" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#staticEditProduct">Edit Product</a></li>
                             <li><a class="dropdown-item" href="../../actions/delete_product.php?product_id='.$product_id.'">Delete Product</a></li>
                           </ul>
                         </div>
@@ -311,8 +312,8 @@
   <script type="text/javascript">
     $(document).ready(() => {
       $('#data').dataTable({
-        'bLengthChange': false,
-        'searching': false,
+        'bLengthChange': true,
+        'searching': true,
         'order': [[0, 'asc']]
       });
       $('#btn-dashboard').click(() => {

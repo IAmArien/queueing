@@ -168,7 +168,7 @@
                   echo '
                     <tr>
                       <td class="color-brown fira-sans-medium">'.$menu_id.'</td>
-                      <td class="color-dark fira-sans-regular">
+                      <td class="color-dark fira-sans-medium">
                         '.$menu_name.'
                       </td>
                       <td class="color-dark fira-sans-regular">
