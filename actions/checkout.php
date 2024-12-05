@@ -4,6 +4,28 @@
   if (isset($_POST['queue_orders']) && isset($_POST['queue_orders_type'])) {
     $queue_orders_type = $_POST['queue_orders_type'];
     $queue_orders = $_POST['queue_orders'];
+
+    if (isset($_SESSION['cart_products'])) {
+      if (count($_SESSION['cart_products']) >= 1) {
+        $queue_orders = json_encode($_SESSION['cart_products']);
+        foreach ($_SESSION['cart_products'] as $cart_items) {
+          $product_id = intval($cart_items['product_id']);
+          $size_quantity = intval($cart_items['quantity']);
+          $fetch_query = "SELECT * FROM products WHERE id = ".$product_id." LIMIT 1";
+          $product_result = $conn->query($fetch_query);
+          if ($product_result->num_rows > 0) {
+            $product_row = $product_result->fetch_assoc();
+            $product_stock = intval($product_row['product_stock']);
+            $new_stock = $product_stock - $size_quantity;
+            $update_query = "UPDATE `products` SET product_stock = ? WHERE id = ?";
+            $stmt = $conn->prepare($update_query);
+            $stmt->bind_param('ss', $new_stock, $product_id);
+            $result = $stmt->execute();
+          }
+        }
+      }
+    }
+
     $insert_query = "INSERT INTO `for_payment` (
       order_number,
       order_products,
@@ -14,13 +36,6 @@
     ) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($insert_query);
     $order_number = strval(rand());
-
-    if (isset($_SESSION['cart_products'])) {
-      if (count($_SESSION['cart_products']) >= 1) {
-        $queue_orders = json_encode($_SESSION['cart_products']);
-      }
-    }
-
     $order_products = $queue_orders;
     $order_type = $queue_orders_type;
     $order_date = date("Y/m/d");

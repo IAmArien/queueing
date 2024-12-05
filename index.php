@@ -124,12 +124,13 @@
               <?php
                 if (isset($_GET['menu_id'])) {
                   $menu_id = $_GET['menu_id'];
-                  $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." AND product_status = 'AVAILABLE' ORDER BY id ASC";
+                  $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
                   $result = $conn->query($fetch_query);
                   if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                       $product_id = $row['id'];
                       $product_name = $row['product_name'];
+                      $product_status = $row['product_status'];
 
                       $fetch_query = "SELECT * FROM products_price WHERE product_id = ".$product_id." LIMIT 1";
                       $price_result = $conn->query($fetch_query);
@@ -138,42 +139,7 @@
                         $price_medio = $price_row['price_medio'];
                         $price_grande = $price_row['price_grande'];
 
-                        echo '
-                          <div class="div-selected-menu-content-items">
-                            <div class="div-menu-item-title" onclick="
-                              onAddToOrder('.$product_id.')">
-                              <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
-                              <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.'</h5>
-                            </div>
-                            <div class="div-menu-item-prices">
-                              <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
-                              <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
-                            </div>
-                          </div>
-                        ';
-                      }
-                    }
-                  }
-                } else {
-                  $fetch_query = "SELECT * FROM menu ORDER BY id ASC LIMIT 1";
-                  $result = $conn->query($fetch_query);
-                  if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    $menu_id = $row['id'];
-                    $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." AND product_status = 'AVAILABLE' ORDER BY id ASC";
-                    $result = $conn->query($fetch_query);
-                    if ($result->num_rows > 0) {
-                      while ($row = $result->fetch_assoc()) {
-                        $product_id = $row['id'];
-                        $product_name = $row['product_name'];
-
-                        $fetch_query = "SELECT * FROM products_price WHERE product_id = ".$product_id." LIMIT 1";
-                        $price_result = $conn->query($fetch_query);
-                        if ($price_result->num_rows > 0) {
-                          $price_row = $price_result->fetch_assoc();
-                          $price_medio = $price_row['price_medio'];
-                          $price_grande = $price_row['price_grande'];
-
+                        if ($product_status == 'AVAILABLE') {
                           echo '
                             <div class="div-selected-menu-content-items">
                               <div class="div-menu-item-title" onclick="
@@ -187,6 +153,72 @@
                               </div>
                             </div>
                           ';
+                        } else {
+                          echo '
+                            <div class="div-selected-menu-content-items">
+                              <div class="div-menu-item-title" style="opacity: 0.5; cursor: not-allowed;">
+                                <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
+                                <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.' (UNAVAILABLE)</h5>
+                              </div>
+                              <div class="div-menu-item-prices">
+                                <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
+                                <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
+                              </div>
+                            </div>
+                          ';
+                        }
+                      }
+                    }
+                  }
+                } else {
+                  $fetch_query = "SELECT * FROM menu ORDER BY id ASC LIMIT 1";
+                  $result = $conn->query($fetch_query);
+                  if ($result->num_rows > 0) {
+                    $row = $result->fetch_assoc();
+                    $menu_id = $row['id'];
+                    $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
+                    $result = $conn->query($fetch_query);
+                    if ($result->num_rows > 0) {
+                      while ($row = $result->fetch_assoc()) {
+                        $product_id = $row['id'];
+                        $product_name = $row['product_name'];
+                        $product_status = $row['product_status'];
+
+                        $fetch_query = "SELECT * FROM products_price WHERE product_id = ".$product_id." LIMIT 1";
+                        $price_result = $conn->query($fetch_query);
+                        if ($price_result->num_rows > 0) {
+                          $price_row = $price_result->fetch_assoc();
+                          $price_medio = $price_row['price_medio'];
+                          $price_grande = $price_row['price_grande'];
+
+                          if ($product_status == 'AVAILABLE') {
+                            echo '
+                              <div class="div-selected-menu-content-items">
+                                <div class="div-menu-item-title" onclick="
+                                  onAddToOrder('.$product_id.')">
+                                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
+                                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.'</h5>
+                                </div>
+                                <div class="div-menu-item-prices">
+                                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
+                                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
+                                </div>
+                              </div>
+                            ';
+                          } else {
+                            echo '
+                              <div class="div-selected-menu-content-items">
+                                <div class="div-menu-item-title" style="opacity: 0.5; cursor: not-allowed;">
+                                  <i class="fa-solid fa-circle-plus"></i>&nbsp;&nbsp;&nbsp;
+                                  <h5 class="h5-menu-item-title fira-sans-medium color-dark">'.$product_name.' (UNAVAILABLE)</h5>
+                                </div>
+                                <div class="div-menu-item-prices">
+                                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_medio.'</h5>
+                                  <h5 class="h5-menu-item-prices fira-sans-medium color-brown">₱'.$price_grande.'</h5>
+                                </div>
+                              </div>
+                            ';
+                          }
                         }
                       }
                     }
