@@ -124,7 +124,7 @@
               <?php
                 if (isset($_GET['menu_id'])) {
                   $menu_id = $_GET['menu_id'];
-                  $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
+                  $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." AND product_status = 'AVAILABLE' ORDER BY id ASC";
                   $result = $conn->query($fetch_query);
                   if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
@@ -160,7 +160,7 @@
                   if ($result->num_rows > 0) {
                     $row = $result->fetch_assoc();
                     $menu_id = $row['id'];
-                    $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." ORDER BY id ASC";
+                    $fetch_query = "SELECT * FROM products WHERE menu_id = ".$menu_id." AND product_status = 'AVAILABLE' ORDER BY id ASC";
                     $result = $conn->query($fetch_query);
                     if ($result->num_rows > 0) {
                       while ($row = $result->fetch_assoc()) {

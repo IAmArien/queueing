@@ -188,7 +188,14 @@
                                 Edit Menu
                               </a>
                             </li>
-                            <li><a class="dropdown-item" href="../../actions/delete_menu.php?menu_id='.$menu_id.'">Delete Menu</a></li>
+                            <li>
+                              <a
+                                class="dropdown-item"
+                                style="cursor: pointer;"
+                                onclick="onDeleteMenu('.$menu_id.')">
+                                Delete Menu
+                              </a>
+                            </li>
                           </ul>
                         </div>
                       </td>
@@ -313,6 +320,44 @@
       </form>
     </div>
   </div>
+  <div
+    class="modal fade" 
+    id="staticDeleteMenu" 
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false" 
+    tabindex="-1" 
+    aria-labelledby="staticBackdropLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <form action="../../actions/delete_menu.php" method="POST">
+        <input type="hidden" value="" name="menu_id" id="dl_menu_id" />
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Delete Menu</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="fira-sans-regular size-14" style="line-height: 1.5rem; text-align: center;">
+              Are you sure you want to delete this menu? This cannot be undone.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-secondary fira-sans-medium">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger fira-sans-medium">
+              <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://kit.fontawesome.com/b2e03e5a6f.js" crossorigin="anonymous"></script>
   <script
@@ -328,7 +373,11 @@
       $('#ed_menu_name').val(menu_name);
       $('#ed_menu_description').val(menu_description);
       $('#staticEditMenu').modal('show');
-    }
+    };
+    const onDeleteMenu = (menu_id) => {
+      $('#dl_menu_id').val(menu_id);
+      $('#staticDeleteMenu').modal('show');
+    };
   </script>
   <script type="text/javascript">
     $(document).ready(() => {

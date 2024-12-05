@@ -154,6 +154,8 @@
               <th class="fira-sans-medium">Menu</th>
               <th class="fira-sans-medium">Price (MD 100ml)</th>
               <th class="fira-sans-medium">Price (GD 200ml)</th>
+              <th class="fira-sans-medium">Stock</th>
+              <th class="fira-sans-medium">Status</th>
               <th class="fira-sans-medium"></th>
             </tr>
           </thead>
@@ -167,6 +169,8 @@
                   $product_id = $row['id'];
                   $menu_id = $row['menu_id'];
                   $product_name = $row['product_name'];
+                  $product_stock = $row['product_stock'];
+                  $product_status = $row['product_status'];
 
                   $menu_name = "";
                   $price_medio = "";
@@ -187,34 +191,110 @@
                     $price_grande = $price_row['price_grande'];
                   }
 
+                  $span_class = 'badge-disabled';
+                  if ($product_status == 'AVAILABLE') {
+                    $span_class = 'badge-enabled';
+                  }
+
                   $row_count += 1;
 
-                  echo '
-                    <tr>
-                      <td class="color-brown fira-sans-medium">'.$row_count.'</td>
-                      <td class="color-brown fira-sans-medium">'.$product_name.'</td>
-                      <td class="color-dark fira-sans-regular">
-                        '.$menu_name.'
-                      </td>
-                      <td class="color-dark fira-sans-regular">
-                        ₱'.$price_medio.'
-                      </td>
-                      <td class="color-dark fira-sans-regular">
-                        ₱'.$price_grande.'
-                      </td>
-                      <td>
-                        <div class="dropdown">
-                          <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            ACTIONS
-                          </button>
-                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li><a class="dropdown-item" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#staticEditProduct">Edit Product</a></li>
-                            <li><a class="dropdown-item" href="../../actions/delete_product.php?product_id='.$product_id.'">Delete Product</a></li>
-                          </ul>
-                        </div>
-                      </td>
-                    </tr>
-                  ';
+                  if ($product_status == 'AVAILABLE') {
+                    echo '
+                      <tr>
+                        <td class="color-brown fira-sans-medium">'.$row_count.'</td>
+                        <td class="color-brown fira-sans-medium">'.$product_name.'</td>
+                        <td class="color-dark fira-sans-regular">
+                          '.$menu_name.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          ₱'.$price_medio.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          ₱'.$price_grande.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          '.$product_stock.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          <span class="'.$span_class.'">'.$product_status.'</span>
+                        </td>
+                        <td>
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              ACTIONS
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer;"
+                                  onclick="onEditProduct('.$product_id.')">
+                                  Edit Product
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer;"
+                                  onclick="onDeleteProduct('.$product_id.')">
+                                  Delete Product
+                                </a>
+                              </li>
+                              <li><a class="dropdown-item" href="../../actions/disable_product.php?product_id='.$product_id.'&product_status=UNAVAILABLE">Set Unavailable</a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ';
+                  } else {
+                    echo '
+                      <tr>
+                        <td class="color-brown fira-sans-medium">'.$row_count.'</td>
+                        <td class="color-brown fira-sans-medium">'.$product_name.'</td>
+                        <td class="color-dark fira-sans-regular">
+                          '.$menu_name.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          ₱'.$price_medio.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          ₱'.$price_grande.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          '.$product_stock.'
+                        </td>
+                        <td class="color-dark fira-sans-regular">
+                          <span class="'.$span_class.'">'.$product_status.'</span>
+                        </td>
+                        <td>
+                          <div class="dropdown">
+                            <button class="btn btn-outline-success dropdown-toggle size-10" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                              ACTIONS
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer;"
+                                  onclick="onEditProduct('.$product_id.')">
+                                  Edit Product
+                                </a>
+                              </li>
+                              <li>
+                                <a
+                                  class="dropdown-item"
+                                  style="cursor: pointer;"
+                                  onclick="onDeleteProduct('.$product_id.')">
+                                  Delete Product
+                                </a>
+                              </li>
+                              <li><a class="dropdown-item" href="../../actions/disable_product.php?product_id='.$product_id.'&product_status=AVAILABLE">Set Available</a></li>
+                            </ul>
+                          </div>
+                        </td>
+                      </tr>
+                    ';
+                  }
                 }
               }
             ?>
@@ -223,6 +303,44 @@
       </div>
     </div>
   </body>
+  <div
+    class="modal fade" 
+    id="staticDeleteProduct" 
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false" 
+    tabindex="-1" 
+    aria-labelledby="staticBackdropLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <form action="../../actions/delete_product.php" method="POST">
+        <input type="hidden" value="" name="product_id" id="dl_product_id" />
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Delete Product</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="fira-sans-regular size-14" style="line-height: 1.5rem; text-align: center;">
+              Are you sure you want to delete this product? This cannot be undone.
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-secondary fira-sans-medium">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger fira-sans-medium">
+              <i class="fas fa-trash-alt"></i>&nbsp;&nbsp;Delete
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
   <div
     class="modal fade" 
     id="staticAddNewProducts" 
@@ -249,7 +367,99 @@
                 name="product_name"
                 type="text"
                 class="form-control fira-sans-regular"
-                placeholder="First Name"
+                placeholder="Product Name"
+                required
+              />
+              <input
+                name="product_stock"
+                type="number"
+                class="form-control fira-sans-regular"
+                placeholder="Allocated Stock"
+                required
+              />
+              <select name="menu_id" class="form-select fira-sans-regular">
+                <?php
+                  $fetch_query = "SELECT * FROM menu ORDER BY id DESC";
+                  $result = $conn->query($fetch_query);
+                  if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                      $menu_id = $row['id'];
+                      $menu_name = $row['menu_name'];
+                      echo '<option value="'.$menu_id.'">'.$menu_name.'</option>';
+                    }
+                  }
+                ?>
+              </select>
+            </div>
+            <div class="div-field-cashier" style="margin-top: 12px;">
+              <input
+                name="price_medio"
+                type="text"
+                class="form-control fira-sans-regular"
+                placeholder="Price (Medio) eg. ₱190"
+                required
+              />
+              <input
+                name="price_grande"
+                type="number"
+                class="form-control fira-sans-regular"
+                placeholder="Price (Grande) eg. ₱200"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              data-bs-dismiss="modal"
+              class="btn btn-secondary fira-sans-medium">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success fira-sans-medium">
+              <i class="fa-solid fa-floppy-disk"></i>&nbsp;&nbsp;Save Changes
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div
+    class="modal fade" 
+    id="staticEditProduct" 
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false" 
+    tabindex="-1" 
+    aria-labelledby="staticBackdropLabel" 
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <form action="../../actions/update_product.php" method="POST">
+        <input type="hidden" name="product_id" id="ed_product_id" />
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5 fira-sans-medium" id="staticBackdropLabel">Edit Product</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p
+              class="fira-sans-regular color-dark"
+              style="margin-bottom: 15px;">
+              Please fill up all the fields to update this product. (Name of the product must not be duplicated to avoid confusions)
+            </p>
+            <div class="div-field-cashier">
+              <input
+                name="product_name"
+                type="text"
+                class="form-control fira-sans-regular"
+                placeholder="Product Name"
+                required
+              />
+              <input
+                name="product_stock"
+                type="number"
+                class="form-control fira-sans-regular"
+                placeholder="Allocated Stock"
                 required
               />
               <select name="menu_id" class="form-select fira-sans-regular">
@@ -309,6 +519,22 @@
   </script>
   <script src="https://cdn.datatables.net/2.0.5/js/dataTables.js"></script>
   <script src="https://cdn.datatables.net/2.0.5/js/dataTables.bootstrap5.js"></script>
+  <script type="text/javascript">
+    const onEditProduct = (
+      product_id,
+      product_name,
+      product_stock,
+      menu_id,
+      price_medio,
+      price_grande
+    ) => {
+      $('#staticEditProduct').modal('show');
+    };
+    const onDeleteProduct = (product_id) => {
+      $('#dl_product_id').val(product_id);
+      $('#staticDeleteProduct').modal('show');
+    };
+  </script>
   <script type="text/javascript">
     $(document).ready(() => {
       $('#data').dataTable({
