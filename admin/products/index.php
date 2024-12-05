@@ -228,8 +228,14 @@
                                 <a
                                   class="dropdown-item"
                                   style="cursor: pointer;"
-                                  onclick="onEditProduct('.$product_id.')">
-                                  Edit Product
+                                  onclick="onEditProduct(
+                                    '.$product_id.',
+                                    '."'".$product_name."'".',
+                                    '.$product_stock.',
+                                    '.$menu_id.',
+                                    '.$price_medio.',
+                                    '.$price_grande.'
+                                  )">Edit Product
                                 </a>
                               </li>
                               <li>
@@ -276,8 +282,14 @@
                                 <a
                                   class="dropdown-item"
                                   style="cursor: pointer;"
-                                  onclick="onEditProduct('.$product_id.')">
-                                  Edit Product
+                                  onclick="onEditProduct(
+                                    '.$product_id.',
+                                    '."'".$product_name."'".',
+                                    '.$product_stock.',
+                                    '.$menu_id.',
+                                    '.$price_medio.',
+                                    '.$price_grande.'
+                                  )">Edit Product
                                 </a>
                               </li>
                               <li>
@@ -450,6 +462,7 @@
             <div class="div-field-cashier">
               <input
                 name="product_name"
+                id="ed_product_name"
                 type="text"
                 class="form-control fira-sans-regular"
                 placeholder="Product Name"
@@ -457,12 +470,13 @@
               />
               <input
                 name="product_stock"
+                id="ed_product_stock"
                 type="number"
                 class="form-control fira-sans-regular"
                 placeholder="Allocated Stock"
                 required
               />
-              <select name="menu_id" class="form-select fira-sans-regular">
+              <select id="ed_menu_id" name="menu_id" class="form-select fira-sans-regular">
                 <?php
                   $fetch_query = "SELECT * FROM menu ORDER BY id DESC";
                   $result = $conn->query($fetch_query);
@@ -479,6 +493,7 @@
             <div class="div-field-cashier" style="margin-top: 12px;">
               <input
                 name="price_medio"
+                id="ed_price_medio"
                 type="text"
                 class="form-control fira-sans-regular"
                 placeholder="Price (Medio) eg. ₱190"
@@ -486,6 +501,7 @@
               />
               <input
                 name="price_grande"
+                id="ed_price_grande"
                 type="number"
                 class="form-control fira-sans-regular"
                 placeholder="Price (Grande) eg. ₱200"
@@ -528,6 +544,12 @@
       price_medio,
       price_grande
     ) => {
+      $('#ed_product_id').val(product_id);
+      $('#ed_product_name').val(product_name);
+      $('#ed_product_stock').val(product_stock);
+      $('#ed_menu_id').val(menu_id);
+      $('#ed_price_medio').val(price_medio);
+      $('#ed_price_grande').val(price_grande);
       $('#staticEditProduct').modal('show');
     };
     const onDeleteProduct = (product_id) => {
